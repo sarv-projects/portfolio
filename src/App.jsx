@@ -7,7 +7,7 @@ const CONFIG = {
   name: "Sarvesh Bhattacharyya",
   title: "AI Engineer",
   tagline: "I build the infrastructure that lets LLMs act autonomously.",
-  email: "you@email.com",
+  email: "sarveshbh.2022@gmail.com",
   github: "https://github.com/sarv-projects",
   linkedin: "https://www.linkedin.com/in/sarvesh-bhattacharyya-485360270/",
   resume: "", // paste your PDF/Drive link here
@@ -57,15 +57,9 @@ const CONFIG = {
       github: "#", live: "",
     },
     {
-      title: "ACARE — Clinical Assistance Robot",
+      title: "ACARE — Clinical Assistance Robot - In Progress (Final Year Major Project) ",
       desc: "6-DOF robotic arm for plastic surgery departments. Dual-layer architecture: Raspberry Pi 5 + ROS2 for AI, Teensy 4.1 for real-time PID motor control. YOLOv11 tool detection, LangGraph dialogue, speaker + face auth, dual-layer hardware safety.",
       stack: ["ROS2", "Python", "C++", "YOLOv11", "LangGraph", "Deepgram", "Raspberry Pi 5"],
-      github: "#", live: "",
-    },
-    {
-      title: "CodeNavigator",
-      desc: "Agentic code intelligence system. Drop any GitHub repo — understand it instantly. AST parsing, 3-layer call graph, Bayesian file probability map, hybrid RAG, 7-node LangGraph, Redis caching, sub-2s query latency.",
-      stack: ["Python", "LangGraph", "Redis", "FastAPI", "ChromaDB", "Langfuse"],
       github: "#", live: "",
     },
   ],
