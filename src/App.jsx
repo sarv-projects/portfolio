@@ -45,13 +45,13 @@ const CONFIG = {
   ],
   projects: [
     {
-      title: "ARIA — AI Interview Coach",
+      title: "ARIA — AI Interview Coach - In Progress ",
       desc: "Voice-based AI interview coach with resume-grounded questioning, smart multi-signal VAD, session memory with semantic no-repeat, face confidence analysis (browser-local), and a pushiness monitor. 8-node LangGraph pipeline. Privacy-first — video never leaves browser.",
       stack: ["React", "Vite", "FastAPI", "LangGraph", "Groq", "Deepgram", "ElevenLabs", "MediaPipe"],
       github: "#", live: "",
     },
     {
-      title: "LLM Twin",
+      title: "LLM Twin - In Progress ",
       desc: "Personal AI fine-tuned to write exactly like me, with RAG-based memory, running 100% locally. QLoRA fine-tuned Llama 3.2 3B on 9k personal messages. 4-bit GGUF via Ollama. ChromaDB for semantic memory.",
       stack: ["Python", "Llama 3.2", "QLoRA", "Unsloth", "Ollama", "ChromaDB", "Sentence Transformers"],
       github: "#", live: "",
