@@ -8,10 +8,10 @@ const CONFIG = {
   title: "AI Engineer",
   tagline: "I build the infrastructure that lets LLMs act autonomously.",
   email: "you@email.com",
-  github: "https://github.com/CoderApex26",
-  linkedin: "https://linkedin.com/in/yourusername",
+  github: "https://github.com/sarv-projects",
+  linkedin: "https://www.linkedin.com/in/sarvesh-bhattacharyya-485360270/",
   resume: "", // paste your PDF/Drive link here
-  about: `Final year ECE student at MSRIT Bengaluru, interning as an AI Engineer. I specialize in backend orchestration — stateful multi-tenant agentic systems using FastAPI, LangGraph, and MCP. I think in systems before I think in code. I don't just write prompts — I design the infrastructure behind them.`,
+  about: `Final year ECE student at MSRIT Bengaluru, interning as an AI Engineer. I specialize in backend orchestration — stateful multi-tenant agentic systems using FastAPI, LangGraph, and MCP.`,
   experience: [
     {
       role: "AI Engineer Intern",
