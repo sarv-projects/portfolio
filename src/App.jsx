@@ -23,7 +23,7 @@ const CONFIG = {
   skillGroups: [
     {
       label:"Languages",
-      skills:["python,javascript,c/c++,java"]
+      skills:["python","javascript","c/c++","java"]
     }
     ,
     {
