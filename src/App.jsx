@@ -58,9 +58,9 @@ const CONFIG = {
     },
     {
       title: "ACARE — Clinical Assistance Robot - In Progress  ",
-      desc: "6-DOF robotic arm for plastic surgery departments. Dual-layer architecture: Raspberry Pi 5 + ROS2 for AI, Teensy 4.1 for real-time PID motor control. YOLOv11 tool detection, LangGraph dialogue, speaker + face auth, dual-layer hardware safety.",
+      desc: "Designed software architecture for a 6-DOF clinical robotic arm for plastic surgery departments. Dual-layer: Raspberry Pi 5 + ROS2 for AI intelligence, Teensy 4.1 for real-time PID motor control. YOLOv11 tool detection, LangGraph dialogue, dual biometric auth, and hardware ESTOP wired directly to motor driver — independent of all software",
       stack: ["ROS2", "Python", "C++", "YOLOv11", "LangGraph", "Deepgram", "Raspberry Pi 5"],
-      github: "#", live: "",
+      github: "#"
     },
   ],
   blogs: [
