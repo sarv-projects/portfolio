@@ -11,13 +11,13 @@ const CONFIG = {
   github: "https://github.com/sarv-projects",
   linkedin: "https://www.linkedin.com/in/sarvesh-bhattacharyya-485360270/",
   resume: "", // paste your PDF/Drive link here
-  about: `Final year ECE student at MSRIT Bengaluru, interning as an AI Engineer. I specialize in backend orchestration — stateful multi-tenant agentic systems using FastAPI, LangGraph, and MCP. I think in systems before I think in code. I don't just write prompts — I design the infrastructure behind them.`,
+  about: `Final year ECE student at MSRIT Bengaluru, interning as an AI Engineer. I specialize in backend & agentic orchestration — especially  stateful  agentic systems using FastAPI, LangGraph, and MCP. `,
   experience: [
     {
       role: "AI Engineer Intern",
       company: "Beaut Group",
       period: "Feb 2025 – Present",
-      desc: "Building multi-tenant agentic integrations on a live production AI platform. Designed and built Slack OAuth integration, Notion→Pinecone incremental sync pipeline, and parallel multi-agent voice qualification architecture using CrewAI + Redis. Proposed Premium Plugin Layer using self-hosted n8n — approved and added to product roadmap.",
+      desc: "In Progress",
     },
   ],
   skillGroups: [
