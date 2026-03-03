@@ -427,7 +427,7 @@ export default function App(){
   const [dark,setDark]=useState(true);
   const th=dark?DARK:LIGHT;
   return(
-    <div style={{background:th.bg,minHeight:"100vh",color:th.text,fontFamily:"'Inter',sans-serif",transition:"background .3s,color .3s"}}>
+    <div style={{background:th.bg,minHeight:"100vh",color:th.text,fontFamily:"'Inter',sans-serif",transition:"background .3s,color .3s",overflowX:"hidden",maxWidth:"100vw"}}>
       <Scanlines/>
       <Nav page={page} setPage={setPage} dark={dark} setDark={setDark} th={th}/>
       <div style={{position:"relative",zIndex:2}}>
