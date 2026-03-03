@@ -11,7 +11,7 @@ const CONFIG = {
   github: "https://github.com/sarv-projects",
   linkedin: "https://www.linkedin.com/in/sarvesh-bhattacharyya-485360270/",
   resume: "", // paste your PDF/Drive link here
-  about: `Final year ECE student at MSRIT Bengaluru, currently interning as an AI Engineer. I'm interested in the full stack of making AI systems actually work in production — from how agents are orchestrated, to how they connect with the real world, to why they sometimes don't behave the way you expect.
+  about: `Final year ECE student at MSRIT Bengaluru, currently interning as an AI Engineer. I work across the full stack of making AI systems actually work in production — from how agents are orchestrated, to how they connect with the real world, to why they sometimes don't behave the way you expect.
 I like going deep on things. Not just getting them to run, but understanding what's actually happening underneath. `,
   experience: [
     {
