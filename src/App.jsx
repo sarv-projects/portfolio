@@ -45,7 +45,7 @@ const CONFIG = {
   ],
   projects: [
     {
-      title: "ARIA — AI Interview Coach - In Progress ",
+      title: "ARIA — AI Interview Coach    - In Progress ",
       desc: "Voice-based AI interview coach with resume-grounded questioning, smart multi-signal VAD, session memory with semantic no-repeat, face confidence analysis (browser-local), and a pushiness monitor. 8-node LangGraph pipeline. Privacy-first — video never leaves browser.",
       stack: ["React", "Vite", "FastAPI", "LangGraph", "Groq", "Deepgram", "ElevenLabs", "MediaPipe"],
       github: "#", live: "",
@@ -57,7 +57,7 @@ const CONFIG = {
       github: "#", live: "",
     },
     {
-      title: "ACARE — Clinical Assistance Robot - In Progress (Final Year Major Project) ",
+      title: "ACARE — Clinical Assistance Robot - In Progress  ",
       desc: "6-DOF robotic arm for plastic surgery departments. Dual-layer architecture: Raspberry Pi 5 + ROS2 for AI, Teensy 4.1 for real-time PID motor control. YOLOv11 tool detection, LangGraph dialogue, speaker + face auth, dual-layer hardware safety.",
       stack: ["ROS2", "Python", "C++", "YOLOv11", "LangGraph", "Deepgram", "Raspberry Pi 5"],
       github: "#", live: "",
