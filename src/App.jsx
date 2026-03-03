@@ -22,20 +22,25 @@ const CONFIG = {
   ],
   skillGroups: [
     {
+      label:"Languages",
+      skills:["python,javascript,c/c++,java"]
+    }
+    ,
+    {
       label: "AI & LLM",
-      skills: ["LangGraph", "CrewAI", "MCP", "RAG", "QLoRA", "Unsloth", "Ollama", "VAPI", "LangChain"],
+      skills: ["LangGraph", "CrewAI", "MCP", "RAG", "QLoRA","LangChain","sklearn","pytorch"],
     },
     {
       label: "Backend",
-      skills: ["Python", "FastAPI", "Node.js", "PostgreSQL", "Redis", "MongoDB", "Docker", "Firebase"],
+      skills: ["FastAPI",  "PostgreSQL", "Redis", "Firebase"],
     },
     {
       label: "Vector & Data",
-      skills: ["Pinecone", "ChromaDB", "Sentence Transformers", "Nango", "Langfuse"],
+      skills: ["Pinecone", "ChromaDB", "Sentence Transformers", "Nango", "Langfuse","pandas","numpy"],
     },
     {
-      label: "Frontend & Tools",
-      skills: ["React", "Vite", "Git", "Linux", "GitHub Actions"],
+      label: "Tools",
+      skills: ["Docker","Bash", "GitHub", "Linux", "GitHub Actions"],
     },
   ],
   projects: [
