@@ -415,7 +415,7 @@ function Contact({setPage,th}){
           </a>
         ))}
       </div>
-      <p style={{fontFamily:"monospace",color:th.textMuted,fontSize:12,marginTop:52,letterSpacing:1}}>// built to last. updated via config.</p>
+      <p style={{fontFamily:"monospace",color:th.textMuted,fontSize:12,marginTop:52,letterSpacing:1}}></p>
     </div>
   );
 }
