@@ -170,16 +170,16 @@ function Nav({page,setPage,dark,setDark,th}){
   return(
     <nav style={{position:"fixed",top:0,left:0,right:0,zIndex:100,
       display:"flex",alignItems:"center",justifyContent:"space-between",
-      padding:"0 2.5rem",height:58,boxSizing:"border-box",
+      padding:"0 1rem",height:52,boxSizing:"border-box",
       background:dark?"rgba(7,8,15,0.9)":"rgba(240,244,248,0.9)",
       backdropFilter:"blur(18px)",borderBottom:`1px solid ${th.border}`,transition:"background .3s"}}>
-      <span onClick={()=>setPage("home")} style={{fontFamily:"monospace",fontSize:15,
+      <span onClick={()=>setPage("home")} style={{fontFamily:"monospace",fontSize:17,
         color:th.text,cursor:"pointer",letterSpacing:1,fontWeight:700}}>
-        {CONFIG.name.split(" ")[0]}<span style={{color:th.accent,fontWeight:400}}> / AI Engineer</span>
+       <span style={{color:th.accent,fontWeight:400}}> AI Engineer</span>
       </span>
       <div style={{display:"flex",alignItems:"center",gap:"1.8rem"}}>
         {PAGES.filter(p=>p!=="home").map(p=>(
-          <span key={p} onClick={()=>setPage(p)} style={{fontFamily:"monospace",fontSize:12,cursor:"pointer",
+          <span key={p} onClick={()=>setPage(p)} style={{fontFamily:"monospace",fontSize:11,cursor:"pointer",
             letterSpacing:1.5,color:page===p?th.accent:th.textSub,textTransform:"uppercase",
             transition:"color .2s",position:"relative"}}>
             {page===p&&<span style={{position:"absolute",bottom:-4,left:0,right:0,height:1,background:th.accent,borderRadius:2}}/>}
@@ -222,8 +222,8 @@ function Home({setPage,th,dark}){
         background:dark?"linear-gradient(to top,rgba(7,8,15,1),transparent)":"linear-gradient(to top,rgba(240,244,248,1),transparent)",
         zIndex:2,pointerEvents:"none"}}/>
       <div style={{position:"relative",zIndex:3,textAlign:"center",padding:"0 1.5rem",maxWidth:740}}>
-        <p style={{fontFamily:"monospace",color:th.accent,fontSize:11,letterSpacing:5,marginBottom:20,textTransform:"uppercase",opacity:.7}}>AI Engineer</p>
-        <h1 style={{fontSize:"clamp(2.8rem,7vw,5.5rem)",fontWeight:900,color:th.text,margin:0,lineHeight:1.04,letterSpacing:-2}}>{CONFIG.name}</h1>
+        
+        <h1 style={{fontSize:"clamp(2.8rem,5vw,4.5rem)",fontWeight:900,color:th.text,margin:0,lineHeight:1.04,letterSpacing:-2}}>{CONFIG.name}</h1>
         <p style={{color:th.textSub,fontSize:"clamp(.95rem,1.8vw,1.15rem)",marginTop:22,minHeight:34,fontStyle:"italic",letterSpacing:.3}}>
           "{typed}{cur&&<span style={{color:th.accent}}>|</span>}"
         </p>
@@ -426,7 +426,7 @@ export default function App(){
   const [dark,setDark]=useState(true);
   const th=dark?DARK:LIGHT;
   return(
-    <div style={{background:th.bg,minHeight:"100vh",color:th.text,fontFamily:"'Inter',sans-serif",transition:"background .3s,color .3s",overflowX:"hidden",maxWidth:"100vw"}}>
+    <div style={{background:th.bg,minHeight:"100vh",color:th.text,fontFamily:"'Syne',sans-serif",transition:"background .3s,color .3s",overflowX:"hidden",maxWidth:"100vw"}}>
       <Scanlines/>
       <Nav page={page} setPage={setPage} dark={dark} setDark={setDark} th={th}/>
       <div style={{position:"relative",zIndex:2}}>
