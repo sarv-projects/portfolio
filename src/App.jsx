@@ -54,7 +54,7 @@ const CONFIG = {
       title: "LLM Twin - In Progress ",
       desc: "Personal AI fine-tuned to write exactly like me, with RAG-based memory, running 100% locally. QLoRA fine-tuned Llama 3.2 3B on 9k personal messages. 4-bit GGUF via Ollama. ChromaDB for semantic memory.",
       stack: ["Python", "Llama 3.2", "QLoRA", "Unsloth", "Ollama", "ChromaDB", "Sentence Transformers"],
-      github: "#", live: "",
+      github: "https://github.com/sarv-projects/llmtwin", live: "",
     },
     {
       title: "ACARE — Clinical Assistance Robot - In Progress  ",
