@@ -28,7 +28,7 @@ const CONFIG = {
     ,
     {
       label: "AI & LLM",
-      skills: ["LangGraph", "CrewAI", "MCP", "RAG", "QLoRA","LangChain","sklearn","pytorch"],
+      skills: ["LangGraph","LangChain", "MCP", "RAG", "sklearn","Pytorch" ,"QLoRA","CrewAI"],
     },
     {
       label: "Backend",
