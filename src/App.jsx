@@ -32,11 +32,11 @@ const CONFIG = {
     },
     {
       label: "Backend",
-      skills: ["FastAPI",  "PostgreSQL", "Redis", "Firebase"],
+      skills: ["FastAPI",  "PostgreSQL", "Redis", "Firebase","DuckDB"],
     },
     {
       label: "Vector & Data",
-      skills: ["Pinecone", "ChromaDB", "Sentence Transformers", "Nango", "Langfuse","pandas","numpy"],
+      skills: ["Pinecone", "ChromaDB", "Nango", "Langfuse","pandas","numpy"],
     },
     {
       label: "Tools",
