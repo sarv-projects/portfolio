@@ -6,7 +6,7 @@ import { useState, useEffect, useRef } from "react";
 const CONFIG = {
   name: "Sarvesh Bhattacharyya",
   title: "AI Engineer",
-  tagline: "I build the infrastructure that lets LLMs act autonomously.",
+  tagline: "I build systems that make LLMs act instead of just talk. \n Focus : Multi-agent systems · RAG · LLM infrastructure · backend systems ",
   email: "sarveshbh.2022@gmail.com",
   github: "https://github.com/sarv-projects",
   linkedin: "https://www.linkedin.com/in/sarvesh-bhattacharyya-485360270/",
@@ -51,7 +51,7 @@ const CONFIG = {
  //     github: "#", live: "",
  //   },
     {
-      title: "LLM Twin - In Progress ",
+      title: "LLM Twin",
       desc: "Personal AI fine-tuned to write exactly like me, with RAG-based memory, running 100% locally. QLoRA fine-tuned Llama 3.2 3B on 9k personal messages. 4-bit GGUF via Ollama. ChromaDB for semantic memory.",
       stack: ["Python", "Llama 3.2", "QLoRA", "Unsloth", "Ollama", "ChromaDB", "Sentence Transformers"],
       github: "https://github.com/sarv-projects/llmtwin", live: "",
@@ -110,7 +110,6 @@ function TechBg({ theme }) {
     }
     function draw() {
       ctx.clearRect(0, 0, W, H);
-      const a = theme.accent;
       // grid
       ctx.strokeStyle = theme === LIGHT ? "rgba(0,153,204,0.06)" : "rgba(0,212,255,0.03)";
       ctx.lineWidth = 1;
@@ -167,21 +166,25 @@ function BackBtn({setPage,th}){
 
 // ── Nav ──
 function Nav({page,setPage,dark,setDark,th}){
+  const [mobileMenuOpen,setMobileMenuOpen]=useState(false);
   return(
     <nav style={{position:"fixed",top:0,left:0,right:0,zIndex:100,
       display:"flex",alignItems:"center",justifyContent:"space-between",
       padding:"0 1rem",height:52,boxSizing:"border-box",
-      background:dark?"rgba(7,8,15,0.9)":"rgba(240,244,248,0.9)",
+      background:dark?"rgba(7,8,15,0.95)":"rgba(240,244,248,0.95)",
       backdropFilter:"blur(18px)",borderBottom:`1px solid ${th.border}`,transition:"background .3s"}}>
       <span onClick={()=>setPage("home")} style={{fontFamily:"monospace",fontSize:17,
         color:th.text,cursor:"pointer",letterSpacing:1,fontWeight:700}}>
-       <span style={{color:th.accent,fontWeight:400}}> AI Engineer</span>
+       <span style={{color:th.accent,fontWeight:400}}>✦ AI</span>
       </span>
-      <div style={{display:"flex",alignItems:"center",gap:"1.8rem"}}>
+      {/* Desktop Menu */}
+      <div style={{display:"flex",alignItems:"center",gap:"1.8rem","@media (max-width: 768px)":{display:"none"}}}>
         {PAGES.filter(p=>p!=="home").map(p=>(
           <span key={p} onClick={()=>setPage(p)} style={{fontFamily:"monospace",fontSize:11,cursor:"pointer",
             letterSpacing:1.5,color:page===p?th.accent:th.textSub,textTransform:"uppercase",
-            transition:"color .2s",position:"relative"}}>
+            transition:"color .2s",position:"relative"}}
+            onMouseEnter={e=>e.currentTarget.style.color=th.accent}
+            onMouseLeave={e=>e.currentTarget.style.color=page===p?th.accent:th.textSub}>
             {page===p&&<span style={{position:"absolute",bottom:-4,left:0,right:0,height:1,background:th.accent,borderRadius:2}}/>}
             {p}
           </span>
@@ -190,16 +193,43 @@ function Nav({page,setPage,dark,setDark,th}){
           <a href={CONFIG.resume} target="_blank" rel="noreferrer" style={{fontFamily:"monospace",fontSize:12,
             letterSpacing:1.5,color:th.accent,border:`1px solid ${th.accent}50`,borderRadius:5,
             padding:"4px 12px",textDecoration:"none",transition:"all .2s"}}
-            onMouseEnter={e=>{e.currentTarget.style.background=`${th.accent}15`;}}
-            onMouseLeave={e=>{e.currentTarget.style.background="transparent";}}>RESUME ↗</a>
+            onMouseEnter={e=>{e.currentTarget.style.background=`${th.accent}15`;e.currentTarget.style.borderColor=th.accent;}}
+            onMouseLeave={e=>{e.currentTarget.style.background="transparent";e.currentTarget.style.borderColor=`${th.accent}50`;}}>RESUME ↗</a>
         )}
-        {/* Dark/Light toggle */}
         <button onClick={()=>setDark(d=>!d)} style={{background:"transparent",border:`1px solid ${th.border}`,
           borderRadius:20,padding:"4px 10px",cursor:"pointer",fontSize:14,transition:"all .2s",
           color:th.textSub}}>
           {dark?"☀":"☾"}
         </button>
       </div>
+      {/* Mobile Menu Toggle */}
+      <div style={{display:"none","@media (max-width: 768px)":{display:"flex"},alignItems:"center",gap:"1rem"}}>
+        <button onClick={()=>setDark(d=>!d)} style={{background:"transparent",border:"none",
+          cursor:"pointer",fontSize:16,color:th.textSub}}>
+          {dark?"☀":"☾"}
+        </button>
+        <button onClick={()=>setMobileMenuOpen(!mobileMenuOpen)} style={{background:"transparent",border:"none",
+          cursor:"pointer",fontSize:18,color:th.text}}>
+          {mobileMenuOpen?"✕":"☰"}
+        </button>
+      </div>
+      {/* Mobile Menu */}
+      {mobileMenuOpen&&<div style={{position:"absolute",top:52,left:0,right:0,background:th.bg,
+        borderBottom:`1px solid ${th.border}`,padding:"1rem",display:"flex",flexDirection:"column",gap:"0.75rem",
+        zIndex:99}}>
+        {PAGES.filter(p=>p!=="home").map(p=>(
+          <span key={p} onClick={()=>{setPage(p);setMobileMenuOpen(false);}} style={{fontFamily:"monospace",fontSize:12,cursor:"pointer",
+            letterSpacing:1.5,color:page===p?th.accent:th.textSub,textTransform:"uppercase",
+            padding:"0.5rem 0",transition:"color .2s"}}>
+            {p}
+          </span>
+        ))}
+        {CONFIG.resume&&(
+          <a href={CONFIG.resume} target="_blank" rel="noreferrer" style={{fontFamily:"monospace",fontSize:12,
+            letterSpacing:1.5,color:th.accent,border:`1px solid ${th.accent}50`,borderRadius:5,
+            padding:"8px 12px",textDecoration:"none",display:"inline-block",width:"fit-content"}}>RESUME ↗</a>
+        )}
+      </div>}
     </nav>
   );
 }
@@ -209,11 +239,11 @@ function Home({setPage,th,dark}){
   const [typed,setTyped]=useState("");
   const [cur,setCur]=useState(true);
   const full=CONFIG.tagline;
-  useEffect(()=>{let i=0;const iv=setInterval(()=>{setTyped(full.slice(0,i+1));i++;if(i>=full.length)clearInterval(iv);},38);return()=>clearInterval(iv);},[]);
+  useEffect(()=>{let i=0;const iv=setInterval(()=>{setTyped(full.slice(0,i+1));i++;if(i>=full.length)clearInterval(iv);},38);return()=>clearInterval(iv);},[full]);
   useEffect(()=>{const iv=setInterval(()=>setCur(c=>!c),530);return()=>clearInterval(iv);},[]);
   return(
-    <div style={{position:"relative",height:"100vh",display:"flex",flexDirection:"column",
-      alignItems:"center",justifyContent:"center",overflow:"hidden"}}>
+    <div style={{position:"relative",height:"calc(100vh - 52px)",display:"flex",flexDirection:"column",
+      alignItems:"center",justifyContent:"center",overflow:"hidden",paddingTop:"52px"}}>
       <TechBg theme={dark?DARK:LIGHT}/>
       <div style={{position:"absolute",inset:0,
         background:dark?"radial-gradient(ellipse at center,transparent 30%,rgba(7,8,15,0.85) 100%)":"radial-gradient(ellipse at center,transparent 30%,rgba(240,244,248,0.85) 100%)",
@@ -223,8 +253,8 @@ function Home({setPage,th,dark}){
         zIndex:2,pointerEvents:"none"}}/>
       <div style={{position:"relative",zIndex:3,textAlign:"center",padding:"0 1.5rem",maxWidth:740}}>
         
-        <h1 style={{fontSize:"clamp(2.8rem,5vw,4.5rem)",fontWeight:900,color:th.text,margin:0,lineHeight:1.04,letterSpacing:-2}}>{CONFIG.name}</h1>
-        <p style={{color:th.textSub,fontSize:"clamp(.95rem,1.8vw,1.15rem)",marginTop:22,minHeight:34,fontStyle:"italic",letterSpacing:.3}}>
+        <h1 style={{fontSize:"clamp(2.2rem,5vw,4.5rem)",fontWeight:900,color:th.text,margin:0,lineHeight:1.1,letterSpacing:-1.5}}>{CONFIG.name}</h1>
+        <p style={{color:th.textSub,fontSize:"clamp(.95rem,1.8vw,1.15rem)",marginTop:22,minHeight:34,fontStyle:"italic",letterSpacing:.3,whiteSpace:"pre-wrap"}}>
           "{typed}{cur&&<span style={{color:th.accent}}>|</span>}"
         </p>
         <div style={{display:"flex",gap:"1rem",justifyContent:"center",marginTop:44,flexWrap:"wrap"}}>
@@ -245,9 +275,9 @@ function Home({setPage,th,dark}){
         <div style={{display:"flex",gap:"1.5rem",justifyContent:"center",marginTop:36}}>
           {[["GitHub",CONFIG.github],["LinkedIn",CONFIG.linkedin]].map(([l,href])=>(
             <a key={l} href={href} target="_blank" rel="noreferrer" style={{fontFamily:"monospace",fontSize:12,
-              color:th.textMuted,textDecoration:"none",letterSpacing:1,transition:"color .2s"}}
+              color:`${th.accent}90`,textDecoration:"none",letterSpacing:1,transition:"color .2s"}}
               onMouseEnter={e=>e.currentTarget.style.color=th.accent}
-              onMouseLeave={e=>e.currentTarget.style.color=th.textMuted}>{l} ↗</a>
+              onMouseLeave={e=>e.currentTarget.style.color=`${th.accent}90`}>{l} ↗</a>
           ))}
         </div>
       </div>
@@ -263,21 +293,25 @@ function Projects({setPage,th}){
       <p style={{fontFamily:"monospace",color:th.accent,fontSize:11,letterSpacing:4,textTransform:"uppercase",marginBottom:8}}>&gt; projects</p>
       <h2 style={{fontSize:"2.4rem",fontWeight:900,color:th.text,margin:"0 0 .4rem",letterSpacing:-1}}>Things I've Built</h2>
       <p style={{color:th.textMuted,fontFamily:"monospace",fontSize:12,marginBottom:44}}>// grows as I ship more</p>
-      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(290px,1fr))",gap:"1.25rem"}}>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))",gap:"1.25rem","@media (max-width: 640px)":{gridTemplateColumns:"1fr"}}}>
         {CONFIG.projects.map((p,i)=>(
           <div key={i} style={{background:th.bgCard,border:`1px solid ${th.border}`,borderRadius:10,
-            padding:"1.6rem",display:"flex",flexDirection:"column",gap:12,transition:"border-color .2s,transform .2s,box-shadow .2s"}}
+            padding:"1.6rem",display:"flex",flexDirection:"column",gap:12,transition:"border-color .2s,transform .2s,box-shadow .2s",cursor:"pointer"}}
             onMouseEnter={e=>{e.currentTarget.style.borderColor=`${th.accent}60`;e.currentTarget.style.transform="translateY(-4px)";e.currentTarget.style.boxShadow="0 12px 40px rgba(0,0,0,0.3)";}}
             onMouseLeave={e=>{e.currentTarget.style.borderColor=th.border;e.currentTarget.style.transform="translateY(0)";e.currentTarget.style.boxShadow="none";}}>
-            <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
-              <h3 style={{color:th.text,fontSize:16,fontWeight:700,margin:0,lineHeight:1.3}}>{p.title}</h3>
-              <span style={{fontFamily:"monospace",color:th.textMuted,fontSize:11}}>0{i+1}</span>
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:"1rem",flexWrap:"wrap"}}>
+              <h3 style={{color:th.text,fontSize:16,fontWeight:700,margin:0,lineHeight:1.3,flex:1}}>{p.title}</h3>
+              <span style={{fontFamily:"monospace",color:th.textMuted,fontSize:11,whiteSpace:"nowrap"}}>0{i+1}</span>
             </div>
             <p style={{color:th.textSub,fontSize:13.5,lineHeight:1.65,margin:0,flex:1}}>{p.desc}</p>
             <div style={{display:"flex",flexWrap:"wrap",gap:6}}>{p.stack.map(t=><Tag key={t} t={t} th={th}/>)}</div>
-            <div style={{display:"flex",gap:"1rem",borderTop:`1px solid ${th.border}`,paddingTop:12}}>
-              {p.github&&<a href={p.github} target="_blank" rel="noreferrer" style={{fontFamily:"monospace",fontSize:12,color:th.accent,textDecoration:"none"}}>GitHub ↗</a>}
-              {p.live&&<a href={p.live} target="_blank" rel="noreferrer" style={{fontFamily:"monospace",fontSize:12,color:th.textMuted,textDecoration:"none"}}>Live ↗</a>}
+            <div style={{display:"flex",gap:"1rem",borderTop:`1px solid ${th.border}`,paddingTop:12,flexWrap:"wrap"}}>
+              {p.github&&p.github!=="#"&&<a href={p.github} target="_blank" rel="noreferrer" style={{fontFamily:"monospace",fontSize:12,color:th.accent,textDecoration:"none",transition:"opacity .2s"}}
+                onMouseEnter={e=>e.currentTarget.style.opacity=0.7}
+                onMouseLeave={e=>e.currentTarget.style.opacity=1}>GitHub ↗</a>}
+              {p.live&&<a href={p.live} target="_blank" rel="noreferrer" style={{fontFamily:"monospace",fontSize:12,color:th.textMuted,textDecoration:"none",transition:"opacity .2s"}}
+                onMouseEnter={e=>e.currentTarget.style.color=th.accent}
+                onMouseLeave={e=>e.currentTarget.style.color=th.textMuted}>Live ↗</a>}
             </div>
           </div>
         ))}
@@ -288,6 +322,7 @@ function Projects({setPage,th}){
 
 // ── SKILLS ──
 function Skills({setPage,th}){
+  const skillColors=["#00d4ff","#00ff88","#ff6b9d","#ffd700","#a78bfa"];
   return(
     <div style={{padding:"7rem 2.5rem 6rem",maxWidth:860,margin:"0 auto"}}>
       <BackBtn setPage={setPage} th={th}/>
@@ -295,28 +330,29 @@ function Skills({setPage,th}){
       <h2 style={{fontSize:"2.4rem",fontWeight:900,color:th.text,margin:"0 0 .4rem",letterSpacing:-1}}>Stack & Skills</h2>
       <p style={{color:th.textMuted,fontFamily:"monospace",fontSize:12,marginBottom:48}}>// tools I actually use in production</p>
       <div style={{display:"flex",flexDirection:"column",gap:"2rem"}}>
-        {CONFIG.skillGroups.map((g,i)=>(
+        {CONFIG.skillGroups.map((g,i)=>{
+          const color=skillColors[i%skillColors.length];
+          return(
           <div key={i}>
-            <p style={{fontFamily:"monospace",color:th.accent,fontSize:11,letterSpacing:3,textTransform:"uppercase",marginBottom:14,opacity:.8}}>// {g.label}</p>
+            <p style={{fontFamily:"monospace",color:color,fontSize:11,letterSpacing:3,textTransform:"uppercase",marginBottom:14,opacity:.9}}>✦ {g.label}</p>
             <div style={{display:"flex",flexWrap:"wrap",gap:10}}>
               {g.skills.map(s=>(
                 <div key={s} style={{background:th.bgCard,border:`1px solid ${th.border}`,borderRadius:8,
                   padding:"10px 18px",fontFamily:"monospace",fontSize:13,color:th.textSub,
                   transition:"all .2s",cursor:"default"}}
-                  onMouseEnter={e=>{e.currentTarget.style.borderColor=`${th.accent}60`;e.currentTarget.style.color=th.accent;e.currentTarget.style.background=`${th.accent}08`;}}
+                  onMouseEnter={e=>{e.currentTarget.style.borderColor=color;e.currentTarget.style.color=color;e.currentTarget.style.background=`${color}08`;}}
                   onMouseLeave={e=>{e.currentTarget.style.borderColor=th.border;e.currentTarget.style.color=th.textSub;e.currentTarget.style.background=th.bgCard;}}>
                   {s}
                 </div>
               ))}
             </div>
           </div>
-        ))}
+        );
+        })}
       </div>
     </div>
   );
 }
-
-// ── BLOG ──
 function Blog({setPage,th}){
   return(
     <div style={{padding:"7rem 2.5rem 6rem",maxWidth:860,margin:"0 auto"}}>
@@ -420,16 +456,38 @@ function Contact({setPage,th}){
   );
 }
 
+// ── FOOTER ──
+function Footer({th}){
+  return(
+    <footer style={{background:th.bgCard,borderTop:`1px solid ${th.border}`,padding:"2rem",
+      textAlign:"center",fontFamily:"monospace",color:th.textMuted,fontSize:12,marginTop:"4rem"}}>
+      <p style={{margin:"0 0 0.5rem"}}>© 2026 Sarvesh Bhattacharyya. All rights reserved.</p>
+      <p style={{margin:0,fontSize:11,opacity:0.7}}>Built with React + Vite · Design by me</p>
+    </footer>
+  );
+}
+
 // ── APP ──
 export default function App(){
   const [page,setPage]=useState("home");
   const [dark,setDark]=useState(true);
   const th=dark?DARK:LIGHT;
   return(
-    <div style={{background:th.bg,minHeight:"100vh",color:th.text,fontFamily:"'Syne',sans-serif",transition:"background .3s,color .3s",overflowX:"hidden",maxWidth:"100vw"}}>
+    <>
+    <style>{`
+      @media (max-width: 768px) {
+        #desktop-nav { display: none !important; }
+        #mobile-nav { display: flex !important; }
+        body { font-size: 14px; }
+      }
+      @media (min-width: 769px) {
+        #mobile-nav { display: none !important; }
+      }
+    `}</style>
+    <div style={{background:th.bg,minHeight:"100vh",color:th.text,fontFamily:"'-apple-system', 'BlinkMacSystemFont', 'Segoe UI', sans-serif",transition:"background .3s,color .3s",overflowX:"hidden",maxWidth:"100vw",display:"flex",flexDirection:"column"}}>
       <Scanlines/>
       <Nav page={page} setPage={setPage} dark={dark} setDark={setDark} th={th}/>
-      <div style={{position:"relative",zIndex:2}}>
+      <div style={{position:"relative",zIndex:2,flex:1}}>
         {page==="home"&&<Home setPage={setPage} th={th} dark={dark}/>}
         {page==="projects"&&<Projects setPage={setPage} th={th}/>}
         {page==="skills"&&<Skills setPage={setPage} th={th}/>}
@@ -437,6 +495,8 @@ export default function App(){
         {page==="about"&&<About setPage={setPage} th={th}/>}
         {page==="contact"&&<Contact setPage={setPage} th={th}/>}
       </div>
+      <Footer th={th}/>
     </div>
+    </>
   );
 }
