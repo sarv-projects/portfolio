@@ -44,21 +44,15 @@ const CONFIG = {
     },
   ],
   projects: [
-   // {
- //     title: "ARIA — AI Interview Coach    - In Progress ",
- //     desc: "Voice-based AI interview coach with resume-grounded questioning, smart multi-signal VAD, session memory with semantic no-repeat, face confidence analysis (browser-local), and a pushiness monitor. 8-node LangGraph pipeline. Privacy-first — video never leaves browser.",
-  //    stack: ["React", "Vite", "FastAPI", "LangGraph", "Groq", "Deepgram", "ElevenLabs", "MediaPipe"],
- //     github: "#", live: "",
- //   },
     {
-      title: "LLM Twin",
-      desc: "Personal AI fine-tuned to write exactly like me, with RAG-based memory, running 100% locally. QLoRA fine-tuned Llama 3.2 3B on 9k personal messages. 4-bit GGUF via Ollama. ChromaDB for semantic memory.",
+      title: "LLM Twin — In Progress",
+      desc: "Personal LLM fine-tuned to replicate my writing style while retaining base reasoning.\n\nInitial approach (prompt + memory) broke quickly — style drifted as context grew and responses became inconsistent.\n\nSplit the system instead:\n- QLoRA fine-tune → style alignment\n- RAG (ChromaDB) → memory retrieval\n- local inference (4-bit GGUF via Ollama) → full offline control\n\nTrained on ~9k personal messages. Early result:\nstrong conversational alignment, but noticeable degradation in structured/professional tone — highlighting dataset bias.\n\nCurrently testing tradeoff between style fidelity vs reasoning degradation.",
       stack: ["Python", "Llama 3.2", "QLoRA", "Unsloth", "Ollama", "ChromaDB", "Sentence Transformers"],
       github: "https://github.com/sarv-projects/llmtwin", live: "",
     },
     {
-      title: "ACARE — Clinical Assistance Robot - In Progress  ",
-      desc: "Designed software architecture for a 6-DOF clinical robotic arm for plastic surgery departments. Dual-layer: Raspberry Pi 5 + ROS2 for AI intelligence, Teensy 4.1 for real-time PID motor control. YOLOv11 tool detection, LangGraph dialogue, dual biometric auth, and hardware ESTOP wired directly to motor driver — independent of all software",
+      title: "ACARE — Semi-Autonomous Clinical Assistance System",
+      desc: "Built a semi-autonomous clinical assistance system combining AI perception with real-time control and orchestration.\n\nArchitected a dual-layer system for clinical task execution using AI + control systems:\n\n- ROS2-based high-level system on Raspberry Pi for perception, voice interaction, and task orchestration (LangGraph)\n- YOLO-based tool detection pipeline for object recognition in surgical environments\n- Voice command interface integrated with task execution pipeline (Deepgram)\n- Real-time motor control using Teensy 4.1 (PID-based control loop)\n- Hardware-level emergency stop (ESTOP) directly wired to motor drivers\n- Multi-modal interaction design (vision + voice) for intent-driven task execution",
       stack: ["ROS2", "Python", "C++", "YOLOv11", "LangGraph", "Deepgram", "Raspberry Pi 5"],
       github: "#"
     },
@@ -98,34 +92,40 @@ function TechBg({ theme }) {
     const canvas = ref.current;
     const ctx = canvas.getContext("2d");
     let W, H, pts, anim;
-    const N = 70;
+    const N = 80; // Increased particles for more sci-fi feel
     function resize() { W = canvas.width = canvas.offsetWidth; H = canvas.height = canvas.offsetHeight; }
     function init() {
       resize();
       pts = Array.from({ length: N }, () => ({
         x: Math.random()*W, y: Math.random()*H,
-        vx: (Math.random()-.5)*.22, vy: (Math.random()-.5)*.22,
-        r: Math.random()*1.2+.4,
+        vx: (Math.random()-.5)*.3, vy: (Math.random()-.5)*.3, // Slightly faster
+        r: Math.random()*1.5+.6,
+        glow: Math.random() > 0.7, // Some particles glow
       }));
     }
     function draw() {
       ctx.clearRect(0, 0, W, H);
-      // grid
-      ctx.strokeStyle = theme === LIGHT ? "rgba(0,153,204,0.06)" : "rgba(0,212,255,0.03)";
+      // Enhanced grid with subtle animation
+      ctx.strokeStyle = theme === LIGHT ? "rgba(0,153,204,0.08)" : "rgba(0,212,255,0.05)";
       ctx.lineWidth = 1;
       for (let x=0;x<W;x+=60){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
       for (let y=0;y<H;y+=60){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
-      // particles
+      // Particles with glow
       for (let i=0;i<N;i++) {
         const p=pts[i]; p.x+=p.vx; p.y+=p.vy;
         if(p.x<0||p.x>W)p.vx*=-1; if(p.y<0||p.y>H)p.vy*=-1;
         ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-        ctx.fillStyle = theme===LIGHT?"rgba(0,153,204,0.5)":"rgba(0,212,255,0.55)"; ctx.fill();
+        if (p.glow) {
+          ctx.shadowColor = theme === LIGHT ? "#0099cc" : "#00d4ff";
+          ctx.shadowBlur = 10;
+        }
+        ctx.fillStyle = theme===LIGHT?"rgba(0,153,204,0.6)":"rgba(0,212,255,0.7)"; ctx.fill();
+        ctx.shadowBlur = 0; // Reset
         for(let j=i+1;j<N;j++){
           const q=pts[j],dx=p.x-q.x,dy=p.y-q.y,d=Math.sqrt(dx*dx+dy*dy);
-          if(d<110){ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(q.x,q.y);
-            ctx.strokeStyle=theme===LIGHT?`rgba(0,153,204,${.09*(1-d/110)})`:`rgba(0,212,255,${.11*(1-d/110)})`;
-            ctx.lineWidth=.5;ctx.stroke();}
+          if(d<120){ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(q.x,q.y);
+            ctx.strokeStyle=theme===LIGHT?`rgba(0,153,204,${.12*(1-d/120)})`:`rgba(0,212,255,${.15*(1-d/120)})`;
+            ctx.lineWidth=.8;ctx.stroke();}
         }
       }
       anim=requestAnimationFrame(draw);
@@ -134,7 +134,7 @@ function TechBg({ theme }) {
     window.addEventListener("resize",init);
     return()=>{cancelAnimationFrame(anim);window.removeEventListener("resize",init);};
   },[theme]);
-  return <canvas ref={ref} style={{position:"absolute",inset:0,width:"100%",height:"100%",opacity:.75}}/>;
+  return <canvas ref={ref} style={{position:"absolute",inset:0,width:"100%",height:"100%",opacity:.8}}/>;
 }
 
 // ── Scanlines ──
@@ -143,12 +143,94 @@ function Scanlines() {
     backgroundImage:"repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.02) 2px,rgba(0,0,0,0.02) 4px)"}}/>;
 }
 
+// ── Matrix Rain ──
+function MatrixRain({ theme }) {
+  const ref = useRef();
+  useEffect(() => {
+    const canvas = ref.current;
+    const ctx = canvas.getContext("2d");
+    let W, H, drops = [], anim;
+    const fontSize = 12;
+    const chars = "01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン";
+
+    function resize() { W = canvas.width = canvas.offsetWidth; H = canvas.height = canvas.offsetHeight; }
+    function init() {
+      resize();
+      drops = Array(Math.floor(W / fontSize)).fill(1);
+    }
+    function draw() {
+      ctx.fillStyle = theme === LIGHT ? "rgba(240,244,248,0.05)" : "rgba(7,8,15,0.05)";
+      ctx.fillRect(0, 0, W, H);
+      ctx.fillStyle = theme === LIGHT ? "#0099cc" : "#00d4ff";
+      ctx.font = fontSize + "px monospace";
+      for (let i = 0; i < drops.length; i++) {
+        const text = chars[Math.floor(Math.random() * chars.length)];
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+        if (drops[i] * fontSize > H && Math.random() > 0.975) drops[i] = 0;
+        drops[i]++;
+      }
+      anim = requestAnimationFrame(draw);
+    }
+    init(); draw();
+    window.addEventListener("resize", init);
+    return () => { cancelAnimationFrame(anim); window.removeEventListener("resize", init); };
+  }, [theme]);
+  return <canvas ref={ref} style={{position:"absolute",inset:0,width:"100%",height:"100%",opacity:0.1,pointerEvents:"none"}}/>;
+}
+
 // ── Tag ──
 function Tag({t,th}){
   return(
     <span style={{fontFamily:"monospace",fontSize:11,color:th.accent,
       background:`${th.accent}10`,border:`1px solid ${th.accent}30`,
       borderRadius:4,padding:"2px 8px",letterSpacing:.5}}>{t}</span>
+  );
+}
+
+function FadeIn({children, delay = 0}) {
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    const id = setTimeout(() => setReady(true), delay);
+    return () => clearTimeout(id);
+  }, [delay]);
+  return (
+    <div style={{
+      opacity: ready ? 1 : 0,
+      transform: ready ? "translateY(0)" : "translateY(10px)",
+      transition: "opacity .35s ease, transform .35s ease",
+    }}>
+      {children}
+    </div>
+  );
+}
+
+function Reveal({children, threshold = 0.25}) {
+  const ref = useRef();
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    if (!ref.current) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          obs.disconnect();
+        }
+      },
+      { threshold }
+    );
+    obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, [threshold]);
+
+  return (
+    <div ref={ref} style={{
+      opacity: visible ? 1 : 0,
+      transform: visible ? "translateY(0)" : "translateY(14px)",
+      transition: "opacity .5s ease, transform .5s ease",
+    }}>
+      {children}
+    </div>
   );
 }
 
@@ -178,7 +260,7 @@ function Nav({page,setPage,dark,setDark,th}){
        <span style={{color:th.accent,fontWeight:400}}>✦ AI</span>
       </span>
       {/* Desktop Menu */}
-      <div style={{display:"flex",alignItems:"center",gap:"1.8rem","@media (max-width: 768px)":{display:"none"}}}>
+      <div id="desktop-nav" style={{display:"flex",alignItems:"center",gap:"1.8rem"}}>
         {PAGES.filter(p=>p!=="home").map(p=>(
           <span key={p} onClick={()=>setPage(p)} style={{fontFamily:"monospace",fontSize:11,cursor:"pointer",
             letterSpacing:1.5,color:page===p?th.accent:th.textSub,textTransform:"uppercase",
@@ -203,7 +285,7 @@ function Nav({page,setPage,dark,setDark,th}){
         </button>
       </div>
       {/* Mobile Menu Toggle */}
-      <div style={{display:"none","@media (max-width: 768px)":{display:"flex"},alignItems:"center",gap:"1rem"}}>
+      <div id="mobile-nav" style={{display:"flex",alignItems:"center",gap:"1rem"}}>
         <button onClick={()=>setDark(d=>!d)} style={{background:"transparent",border:"none",
           cursor:"pointer",fontSize:16,color:th.textSub}}>
           {dark?"☀":"☾"}
@@ -214,9 +296,10 @@ function Nav({page,setPage,dark,setDark,th}){
         </button>
       </div>
       {/* Mobile Menu */}
-      {mobileMenuOpen&&<div style={{position:"absolute",top:52,left:0,right:0,background:th.bg,
-        borderBottom:`1px solid ${th.border}`,padding:"1rem",display:"flex",flexDirection:"column",gap:"0.75rem",
-        zIndex:99}}>
+      <div style={{position:"absolute",top:52,left:0,right:0,background:th.bg,
+        borderBottom:`1px solid ${th.border}`,padding:mobileMenuOpen?"1rem":"0 1rem",display:"flex",flexDirection:"column",gap:"0.75rem",
+        zIndex:99,maxHeight: mobileMenuOpen?320:0,opacity: mobileMenuOpen?1:0,overflow:"hidden",
+        pointerEvents: mobileMenuOpen?"auto":"none",transition:"max-height .25s ease, opacity .25s ease"}}>
         {PAGES.filter(p=>p!=="home").map(p=>(
           <span key={p} onClick={()=>{setPage(p);setMobileMenuOpen(false);}} style={{fontFamily:"monospace",fontSize:12,cursor:"pointer",
             letterSpacing:1.5,color:page===p?th.accent:th.textSub,textTransform:"uppercase",
@@ -229,7 +312,7 @@ function Nav({page,setPage,dark,setDark,th}){
             letterSpacing:1.5,color:th.accent,border:`1px solid ${th.accent}50`,borderRadius:5,
             padding:"8px 12px",textDecoration:"none",display:"inline-block",width:"fit-content"}}>RESUME ↗</a>
         )}
-      </div>}
+      </div>
     </nav>
   );
 }
@@ -245,75 +328,102 @@ function Home({setPage,th,dark}){
     <div style={{position:"relative",height:"calc(100vh - 52px)",display:"flex",flexDirection:"column",
       alignItems:"center",justifyContent:"center",overflow:"hidden",paddingTop:"52px"}}>
       <TechBg theme={dark?DARK:LIGHT}/>
+      <MatrixRain theme={dark?DARK:LIGHT}/>
       <div style={{position:"absolute",inset:0,
         background:dark?"radial-gradient(ellipse at center,transparent 30%,rgba(7,8,15,0.85) 100%)":"radial-gradient(ellipse at center,transparent 30%,rgba(240,244,248,0.85) 100%)",
         zIndex:1,pointerEvents:"none"}}/>
       <div style={{position:"absolute",bottom:0,left:0,right:0,height:200,
         background:dark?"linear-gradient(to top,rgba(7,8,15,1),transparent)":"linear-gradient(to top,rgba(240,244,248,1),transparent)",
         zIndex:2,pointerEvents:"none"}}/>
-      <div style={{position:"relative",zIndex:3,textAlign:"center",padding:"0 1.5rem",maxWidth:740}}>
-        
-        <h1 style={{fontSize:"clamp(2.2rem,5vw,4.5rem)",fontWeight:900,color:th.text,margin:0,lineHeight:1.1,letterSpacing:-1.5}}>{CONFIG.name}</h1>
-        <p style={{color:th.textSub,fontSize:"clamp(.95rem,1.8vw,1.15rem)",marginTop:22,minHeight:34,fontStyle:"italic",letterSpacing:.3,whiteSpace:"pre-wrap"}}>
-          "{typed}{cur&&<span style={{color:th.accent}}>|</span>}"
-        </p>
-        <div style={{display:"flex",gap:"1rem",justifyContent:"center",marginTop:44,flexWrap:"wrap"}}>
-          <button onClick={()=>setPage("projects")} style={{fontFamily:"monospace",fontSize:13,letterSpacing:1.5,
-            textTransform:"uppercase",padding:"11px 32px",borderRadius:6,cursor:"pointer",
-            background:th.accent,color:dark?"#07080f":"#fff",border:`1px solid ${th.accent}`,fontWeight:700,
-            boxShadow:`0 0 28px ${th.accent}50`,transition:"all .2s"}}
-            onMouseEnter={e=>{e.currentTarget.style.boxShadow=`0 0 42px ${th.accent}80`;e.currentTarget.style.transform="translateY(-2px)";}}
-            onMouseLeave={e=>{e.currentTarget.style.boxShadow=`0 0 28px ${th.accent}50`;e.currentTarget.style.transform="translateY(0)";}}>
-            View Projects</button>
-          <button onClick={()=>setPage("about")} style={{fontFamily:"monospace",fontSize:13,letterSpacing:1.5,
-            textTransform:"uppercase",padding:"11px 32px",borderRadius:6,cursor:"pointer",
-            background:"transparent",color:th.accent,border:`1px solid ${th.accent}60`,transition:"all .2s"}}
-            onMouseEnter={e=>{e.currentTarget.style.background=`${th.accent}10`;e.currentTarget.style.borderColor=th.accent;}}
-            onMouseLeave={e=>{e.currentTarget.style.background="transparent";e.currentTarget.style.borderColor=`${th.accent}60`;}}>
-            About Me</button>
+      <FadeIn delay={90}>
+        <div style={{position:"relative",zIndex:3,textAlign:"center",padding:"0 1.5rem",maxWidth:740}}>
+          <h1 style={{fontSize:"clamp(2.2rem,5vw,4.5rem)",fontWeight:900,color:th.text,margin:0,lineHeight:1.1,letterSpacing:-1.5}}>{CONFIG.name}</h1>
+          <p style={{color:th.textSub,fontSize:"clamp(.95rem,1.8vw,1.15rem)",marginTop:22,minHeight:34,fontStyle:"italic",letterSpacing:.3,whiteSpace:"pre-wrap"}}>
+            "{typed}{cur&&<span style={{color:th.accent}}>|</span>}"
+          </p>
+          <div style={{display:"flex",gap:"1rem",justifyContent:"center",marginTop:44,flexWrap:"wrap"}}>
+            <button onClick={()=>setPage("projects")} style={{fontFamily:"monospace",fontSize:13,letterSpacing:1.5,
+              textTransform:"uppercase",padding:"11px 32px",borderRadius:6,cursor:"pointer",
+              background:th.accent,color:dark?"#07080f":"#fff",border:`1px solid ${th.accent}`,fontWeight:700,
+              boxShadow:`0 0 28px ${th.accent}50`,transition:"all .2s"}}
+              onMouseEnter={e=>{e.currentTarget.style.boxShadow=`0 0 42px ${th.accent}80`;e.currentTarget.style.transform="translateY(-2px)";}}
+              onMouseLeave={e=>{e.currentTarget.style.boxShadow=`0 0 28px ${th.accent}50`;e.currentTarget.style.transform="translateY(0)";}}>
+              View Projects</button>
+            <button onClick={()=>setPage("about")} style={{fontFamily:"monospace",fontSize:13,letterSpacing:1.5,
+              textTransform:"uppercase",padding:"11px 32px",borderRadius:6,cursor:"pointer",
+              background:"transparent",color:th.accent,border:`1px solid ${th.accent}60`,transition:"all .2s"}}
+              onMouseEnter={e=>{e.currentTarget.style.background=`${th.accent}10`;e.currentTarget.style.borderColor=th.accent;}}
+              onMouseLeave={e=>{e.currentTarget.style.background="transparent";e.currentTarget.style.borderColor=`${th.accent}60`;}}>
+              About Me</button>
+          </div>
+          <div style={{display:"flex",gap:"1.5rem",justifyContent:"center",marginTop:36}}>
+            {[["GitHub",CONFIG.github],["LinkedIn",CONFIG.linkedin]].map(([l,href])=>(
+              <a key={l} href={href} target="_blank" rel="noreferrer" style={{fontFamily:"monospace",fontSize:12,
+                color:`${th.accent}90`,textDecoration:"none",letterSpacing:1,transition:"color .2s"}}
+                onMouseEnter={e=>e.currentTarget.style.color=th.accent}
+                onMouseLeave={e=>e.currentTarget.style.color=`${th.accent}90`}>{l} ↗</a>
+            ))}
+          </div>
         </div>
-        <div style={{display:"flex",gap:"1.5rem",justifyContent:"center",marginTop:36}}>
-          {[["GitHub",CONFIG.github],["LinkedIn",CONFIG.linkedin]].map(([l,href])=>(
-            <a key={l} href={href} target="_blank" rel="noreferrer" style={{fontFamily:"monospace",fontSize:12,
-              color:`${th.accent}90`,textDecoration:"none",letterSpacing:1,transition:"color .2s"}}
-              onMouseEnter={e=>e.currentTarget.style.color=th.accent}
-              onMouseLeave={e=>e.currentTarget.style.color=`${th.accent}90`}>{l} ↗</a>
-          ))}
-        </div>
-      </div>
+      </FadeIn>
     </div>
   );
 }
 
 // ── PROJECTS ──
 function Projects({setPage,th}){
+  const projectIcons = ["🤖", "⚕️"]; // AI for LLM Twin, Medical for ACARE
   return(
-    <div style={{padding:"7rem 2.5rem 6rem",maxWidth:1040,margin:"0 auto"}}>
+    <div style={{padding:"7rem 2.5rem 6rem",maxWidth:1200,margin:"0 auto"}}>
       <BackBtn setPage={setPage} th={th}/>
       <p style={{fontFamily:"monospace",color:th.accent,fontSize:11,letterSpacing:4,textTransform:"uppercase",marginBottom:8}}>&gt; projects</p>
       <h2 style={{fontSize:"2.4rem",fontWeight:900,color:th.text,margin:"0 0 .4rem",letterSpacing:-1}}>Things I've Built</h2>
-      <p style={{color:th.textMuted,fontFamily:"monospace",fontSize:12,marginBottom:44}}>// grows as I ship more</p>
-      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))",gap:"1.25rem","@media (max-width: 640px)":{gridTemplateColumns:"1fr"}}}>
+      <p style={{color:th.textMuted,fontFamily:"monospace",fontSize:12,marginBottom:64}}>// grows as I ship more</p>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(320px,1fr))",gap:"2rem","@media (max-width: 768px)":{gridTemplateColumns:"1fr"}}}>
         {CONFIG.projects.map((p,i)=>(
-          <div key={i} style={{background:th.bgCard,border:`1px solid ${th.border}`,borderRadius:10,
-            padding:"1.6rem",display:"flex",flexDirection:"column",gap:12,transition:"border-color .2s,transform .2s,box-shadow .2s",cursor:"pointer"}}
-            onMouseEnter={e=>{e.currentTarget.style.borderColor=`${th.accent}60`;e.currentTarget.style.transform="translateY(-4px)";e.currentTarget.style.boxShadow="0 12px 40px rgba(0,0,0,0.3)";}}
-            onMouseLeave={e=>{e.currentTarget.style.borderColor=th.border;e.currentTarget.style.transform="translateY(0)";e.currentTarget.style.boxShadow="none";}}>
-            <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:"1rem",flexWrap:"wrap"}}>
-              <h3 style={{color:th.text,fontSize:16,fontWeight:700,margin:0,lineHeight:1.3,flex:1}}>{p.title}</h3>
-              <span style={{fontFamily:"monospace",color:th.textMuted,fontSize:11,whiteSpace:"nowrap"}}>0{i+1}</span>
+          <Reveal key={i}>
+            <div style={{background:th.bgCard,border:`1px solid ${th.border}`,borderRadius:12,
+              padding:"2rem",display:"flex",flexDirection:"column",gap:16,transition:"all .3s ease",
+              cursor:"pointer",position:"relative",overflow:"hidden",
+              boxShadow:`0 4px 20px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.05)`}}
+              onMouseEnter={e=>{e.currentTarget.style.borderColor=th.textMuted;e.currentTarget.style.transform="translateY(-6px)";e.currentTarget.style.boxShadow=`0 12px 40px rgba(0,0,0,0.2), 0 0 20px rgba(0,0,0,0.1)`;}}
+              onMouseLeave={e=>{e.currentTarget.style.borderColor=th.border;e.currentTarget.style.transform="translateY(0)";e.currentTarget.style.boxShadow=`0 4px 20px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.05)`;}}>
+              {/* Subtle glow effect */}
+              <div style={{position:"absolute",top:0,left:0,right:0,bottom:0,background:`linear-gradient(135deg, rgba(0,0,0,0.02), transparent)`,pointerEvents:"none"}}/>
+              <div style={{position:"relative",zIndex:1}}>
+                <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:12}}>
+                  <span style={{fontSize:24}}>{projectIcons[i] || "⚡"}</span>
+                  <div style={{flex:1}}>
+                    <h3 style={{color:th.text,fontSize:18,fontWeight:800,margin:0,lineHeight:1.2,letterSpacing:-.5}}>{p.title}</h3>
+                    <span style={{fontFamily:"monospace",color:th.textMuted,fontSize:10,marginTop:4,display:"block"}}>0{i+1}</span>
+                  </div>
+                </div>
+                <div style={{color:th.textSub,fontSize:14,lineHeight:1.7,marginBottom:16}}>
+                  {p.desc.split('\n\n').map((para, idx) => (
+                    <p key={idx} style={{margin: idx === 0 ? "0 0 12px" : "12px 0", fontSize: idx === 0 ? 15 : 14, fontWeight: idx === 0 ? 600 : 400}}>
+                      {para.split('\n').map((line, j) => (
+                        <span key={j}>
+                          {line.startsWith('- ') ? <span style={{color:th.text,fontWeight:500}}>• {line.slice(2)}</span> : line}
+                          {j < para.split('\n').length - 1 && <br/>}
+                        </span>
+                      ))}
+                    </p>
+                  ))}
+                </div>
+                <div style={{display:"flex",flexWrap:"wrap",gap:8,marginBottom:16}}>
+                  {p.stack.map(t=><Tag key={t} t={t} th={th}/>)}
+                </div>
+                <div style={{display:"flex",gap:"1rem",borderTop:`1px solid ${th.border}`,paddingTop:16,flexWrap:"wrap"}}>
+                  {p.github&&p.github!=="#"&&<a href={p.github} target="_blank" rel="noreferrer" style={{fontFamily:"monospace",fontSize:12,color:th.accent,textDecoration:"none",transition:"all .2s",padding:"6px 12px",border:`1px solid ${th.accent}40`,borderRadius:6}}
+                    onMouseEnter={e=>{e.currentTarget.style.background=`rgba(0,0,0,0.05)`;e.currentTarget.style.borderColor=th.textMuted;}}
+                    onMouseLeave={e=>{e.currentTarget.style.background="transparent";e.currentTarget.style.borderColor=`rgba(0,0,0,0.1)`;}}>GitHub ↗</a>}
+                  {p.live&&<a href={p.live} target="_blank" rel="noreferrer" style={{fontFamily:"monospace",fontSize:12,color:th.textMuted,textDecoration:"none",transition:"color .2s"}}
+                    onMouseEnter={e=>e.currentTarget.style.color=th.accent}
+                    onMouseLeave={e=>e.currentTarget.style.color=th.textMuted}>Live ↗</a>}
+                </div>
+              </div>
             </div>
-            <p style={{color:th.textSub,fontSize:13.5,lineHeight:1.65,margin:0,flex:1}}>{p.desc}</p>
-            <div style={{display:"flex",flexWrap:"wrap",gap:6}}>{p.stack.map(t=><Tag key={t} t={t} th={th}/>)}</div>
-            <div style={{display:"flex",gap:"1rem",borderTop:`1px solid ${th.border}`,paddingTop:12,flexWrap:"wrap"}}>
-              {p.github&&p.github!=="#"&&<a href={p.github} target="_blank" rel="noreferrer" style={{fontFamily:"monospace",fontSize:12,color:th.accent,textDecoration:"none",transition:"opacity .2s"}}
-                onMouseEnter={e=>e.currentTarget.style.opacity=0.7}
-                onMouseLeave={e=>e.currentTarget.style.opacity=1}>GitHub ↗</a>}
-              {p.live&&<a href={p.live} target="_blank" rel="noreferrer" style={{fontFamily:"monospace",fontSize:12,color:th.textMuted,textDecoration:"none",transition:"opacity .2s"}}
-                onMouseEnter={e=>e.currentTarget.style.color=th.accent}
-                onMouseLeave={e=>e.currentTarget.style.color=th.textMuted}>Live ↗</a>}
-            </div>
-          </div>
+          </Reveal>
         ))}
       </div>
     </div>
@@ -461,8 +571,8 @@ function Footer({th}){
   return(
     <footer style={{background:th.bgCard,borderTop:`1px solid ${th.border}`,padding:"2rem",
       textAlign:"center",fontFamily:"monospace",color:th.textMuted,fontSize:12,marginTop:"4rem"}}>
-      <p style={{margin:"0 0 0.5rem"}}>© 2026 Sarvesh Bhattacharyya. All rights reserved.</p>
-      <p style={{margin:0,fontSize:11,opacity:0.7}}>Built with React + Vite · Design by me</p>
+      <p style={{margin:"0 0 0.5rem"}}>© {new Date().getFullYear()} {CONFIG.name}. All rights reserved.</p>
+      <p style={{margin:0,fontSize:11,opacity:0.7}}>Built with React + Vite · Designed & coded by me</p>
     </footer>
   );
 }
@@ -488,12 +598,14 @@ export default function App(){
       <Scanlines/>
       <Nav page={page} setPage={setPage} dark={dark} setDark={setDark} th={th}/>
       <div style={{position:"relative",zIndex:2,flex:1}}>
-        {page==="home"&&<Home setPage={setPage} th={th} dark={dark}/>}
-        {page==="projects"&&<Projects setPage={setPage} th={th}/>}
-        {page==="skills"&&<Skills setPage={setPage} th={th}/>}
-        {page==="blog"&&<Blog setPage={setPage} th={th}/>}
-        {page==="about"&&<About setPage={setPage} th={th}/>}
-        {page==="contact"&&<Contact setPage={setPage} th={th}/>}
+        <FadeIn key={page}>
+          {page==="home"&&<Home setPage={setPage} th={th} dark={dark}/>}
+          {page==="projects"&&<Projects setPage={setPage} th={th}/>}
+          {page==="skills"&&<Skills setPage={setPage} th={th}/>}
+          {page==="blog"&&<Blog setPage={setPage} th={th}/>}
+          {page==="about"&&<About setPage={setPage} th={th}/>}
+          {page==="contact"&&<Contact setPage={setPage} th={th}/>}
+        </FadeIn>
       </div>
       <Footer th={th}/>
     </div>
