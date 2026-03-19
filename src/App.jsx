@@ -6,7 +6,7 @@ import { useState, useEffect, useRef } from "react";
 const CONFIG = {
   name: "Sarvesh Bhattacharyya",
   title: "AI Engineer",
-  tagline: "I build systems that make LLMs act instead of just talk. \n Focus : Multi-agent systems · RAG · LLM infrastructure · backend systems ",
+  tagline: "I build systems that make LLMs act instead of just talk.\nMulti-agent · RAG · Voice AI ·Intelligent Systems · Backend infrastructure",
   email: "sarveshbh.2022@gmail.com",
   github: "https://github.com/sarv-projects",
   linkedin: "https://www.linkedin.com/in/sarvesh-bhattacharyya-485360270/",
@@ -45,15 +45,15 @@ const CONFIG = {
   ],
   projects: [
     {
-      title: "LLM Twin — In Progress",
-      desc: "Personal LLM fine-tuned to replicate my writing style while retaining base reasoning.\n\nInitial approach (prompt + memory) broke quickly — style drifted as context grew and responses became inconsistent.\n\nSplit the system instead:\n- QLoRA fine-tune → style alignment\n- RAG (ChromaDB) → memory retrieval\n- local inference (4-bit GGUF via Ollama) → full offline control\n\nTrained on ~9k personal messages. Early result:\nstrong conversational alignment, but noticeable degradation in structured/professional tone — highlighting dataset bias.\n\nCurrently testing tradeoff between style fidelity vs reasoning degradation.",
-      stack: ["Python", "Llama 3.2", "QLoRA", "Unsloth", "Ollama", "ChromaDB", "Sentence Transformers"],
+      title: "🤖 LLM Twin — In Progress",
+      desc: "Fine-tuned a personal LLM to replicate writing style while preserving base reasoning capabilities:\n\n- QLoRA fine-tuning on 4,670 personal message pairs using Unsloth on Colab T4 — loss 4.4 → 1.10 in 12 minutes\n- 4-bit GGUF quantization via Ollama for fully local inference on consumer hardware\n- RAG memory layer using ChromaDB + Sentence Transformers for long-context recall across conversations\n- Key finding: domain transfer confirmed, style transfer partial — professional tone requires professional training data distribution",
+      stack: ["Python", "Llama 3.2 3B", "QLoRA", "Unsloth", "Ollama", "ChromaDB", "Sentence Transformers"],
       github: "https://github.com/sarv-projects/llmtwin", live: "",
     },
     {
-      title: "ACARE — Semi-Autonomous Clinical Assistance System",
-      desc: "Built a semi-autonomous clinical assistance system combining AI perception with real-time control and orchestration.\n\nArchitected a dual-layer system for clinical task execution using AI + control systems:\n\n- ROS2-based high-level system on Raspberry Pi for perception, voice interaction, and task orchestration (LangGraph)\n- YOLO-based tool detection pipeline for object recognition in surgical environments\n- Voice command interface integrated with task execution pipeline (Deepgram)\n- Real-time motor control using Teensy 4.1 (PID-based control loop)\n- Hardware-level emergency stop (ESTOP) directly wired to motor drivers\n- Multi-modal interaction design (vision + voice) for intent-driven task execution",
-      stack: ["ROS2", "Python", "C++", "YOLOv11", "LangGraph", "Deepgram", "Raspberry Pi 5"],
+      title: "⚕️ ACARE — Autonomous Clinical Assistance Robot",
+      desc: "Designed and developed the software architecture for a 6-DOF clinical robotic arm built for plastic surgery departments — covering ROS2 node design, voice pipeline, dialogue, and task planning.\n\n- Designed 10 ROS2 nodes on Raspberry Pi 5 — MultiThreadedExecutor, typed custom messages, QoS policy per topic category\n- Built full voice pipeline: Silero VAD → Deepgram Nova-2 streaming STT → Groq intent parsing → LangGraph clarification graph → validated intent\n- Implemented Bayesian NBV search — viewpoints sorted by P(tool|zone), probability updated on every find/miss, clamped [0.05, 0.90] to prevent saturation\n- Designed graded safety system: WARNING / CRITICAL / ESTOP severity tiers with deterministic safe deposit sequence before PWM disable\n- Orchestrated end-to-end pick-and-place pipeline: intent → YOLOv11 TFLite INT8 detection → DLS IK solver → motion execution → biometric handover verification",
+      stack: ["ROS2", "Python", "C++", "YOLOv11 TFLite INT8", "LangGraph", "Groq", "Deepgram", "SpeechBrain", "Silero VAD", "SQLite"],
       github: "#"
     },
   ],
@@ -180,10 +180,25 @@ function MatrixRain({ theme }) {
 
 // ── Tag ──
 function Tag({t,th}){
+  const important = [];
+  const isImportant = important.includes(t);
   return(
-    <span style={{fontFamily:"monospace",fontSize:11,color:th.accent,
-      background:`${th.accent}10`,border:`1px solid ${th.accent}30`,
-      borderRadius:4,padding:"2px 8px",letterSpacing:.5}}>{t}</span>
+    <span style={{
+      fontFamily:"monospace",
+      fontSize:11,
+      color: isImportant ? th.accent : th.textMuted,
+      background: isImportant ? `${th.accent}10` : th.bg,
+      border: isImportant ? `1px solid ${th.accent}30` : `1px solid ${th.border}`,
+      borderRadius:4,
+      padding:"2px 8px",
+      letterSpacing:.5,
+      fontWeight: isImportant ? 600 : 400,
+      transition: "box-shadow .2s ease, transform .2s ease",
+      boxShadow: `0 0 0 0 rgba(0,0,0,0)`
+    }}
+    onMouseEnter={e=>{e.currentTarget.style.boxShadow=`0 0 12px rgba(0,212,255,0.18)`; e.currentTarget.style.transform="translateY(-1px)";}}
+    onMouseLeave={e=>{e.currentTarget.style.boxShadow="0 0 0 0 rgba(0,0,0,0)"; e.currentTarget.style.transform="translateY(0)";}}
+    >{t}</span>
   );
 }
 
@@ -372,7 +387,6 @@ function Home({setPage,th,dark}){
 
 // ── PROJECTS ──
 function Projects({setPage,th}){
-  const projectIcons = ["🤖", "⚕️"]; // AI for LLM Twin, Medical for ACARE
   return(
     <div style={{padding:"7rem 2.5rem 6rem",maxWidth:1200,margin:"0 auto"}}>
       <BackBtn setPage={setPage} th={th}/>
@@ -382,21 +396,18 @@ function Projects({setPage,th}){
       <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(320px,1fr))",gap:"2rem","@media (max-width: 768px)":{gridTemplateColumns:"1fr"}}}>
         {CONFIG.projects.map((p,i)=>(
           <Reveal key={i}>
-            <div style={{background:th.bgCard,border:`1px solid ${th.border}`,borderRadius:12,
+            <div style={{background:th.bgCard,border:`1px solid ${th.border}`,borderLeft:`3px solid ${th.accent}`,borderRadius:12,
               padding:"2rem",display:"flex",flexDirection:"column",gap:16,transition:"all .3s ease",
               cursor:"pointer",position:"relative",overflow:"hidden",
               boxShadow:`0 4px 20px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.05)`}}
-              onMouseEnter={e=>{e.currentTarget.style.borderColor=th.textMuted;e.currentTarget.style.transform="translateY(-6px)";e.currentTarget.style.boxShadow=`0 12px 40px rgba(0,0,0,0.2), 0 0 20px rgba(0,0,0,0.1)`;}}
-              onMouseLeave={e=>{e.currentTarget.style.borderColor=th.border;e.currentTarget.style.transform="translateY(0)";e.currentTarget.style.boxShadow=`0 4px 20px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.05)`;}}>
+              onMouseEnter={e=>{e.currentTarget.style.borderColor=th.textMuted;e.currentTarget.style.borderLeftColor=th.accent;e.currentTarget.style.transform="translateY(-6px)";e.currentTarget.style.boxShadow=`0 12px 40px rgba(0,0,0,0.2), 0 0 20px rgba(0,0,0,0.1)`;}}
+              onMouseLeave={e=>{e.currentTarget.style.borderColor=th.border;e.currentTarget.style.borderLeftColor=th.accent;e.currentTarget.style.transform="translateY(0)";e.currentTarget.style.boxShadow=`0 4px 20px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.05)`;}}>
               {/* Subtle glow effect */}
               <div style={{position:"absolute",top:0,left:0,right:0,bottom:0,background:`linear-gradient(135deg, rgba(0,0,0,0.02), transparent)`,pointerEvents:"none"}}/>
               <div style={{position:"relative",zIndex:1}}>
-                <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:12}}>
-                  <span style={{fontSize:24}}>{projectIcons[i] || "⚡"}</span>
-                  <div style={{flex:1}}>
-                    <h3 style={{color:th.text,fontSize:18,fontWeight:800,margin:0,lineHeight:1.2,letterSpacing:-.5}}>{p.title}</h3>
-                    <span style={{fontFamily:"monospace",color:th.textMuted,fontSize:10,marginTop:4,display:"block"}}>0{i+1}</span>
-                  </div>
+                <div style={{marginBottom:12}}>
+                  <h3 style={{color:th.text,fontSize:18,fontWeight:800,margin:0,lineHeight:1.2,letterSpacing:-.5}}>{p.title}</h3>
+                  <span style={{fontFamily:"monospace",color:th.accent,fontSize:12,marginTop:4,display:"block",fontWeight:600}}>0{i+1}</span>
                 </div>
                 <div style={{color:th.textSub,fontSize:14,lineHeight:1.7,marginBottom:16}}>
                   {p.desc.split('\n\n').map((para, idx) => (
