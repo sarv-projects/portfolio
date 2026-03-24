@@ -10,6 +10,7 @@ const CONFIG = {
   email: "sarveshbh.2022@gmail.com",
   github: "https://github.com/sarv-projects",
   linkedin: "https://www.linkedin.com/in/sarvesh-bhattacharyya-485360270/",
+  medium: "https://medium.com/@sarveshbh.2022",
   resume: "", // paste your PDF/Drive link here
   about: `Final year ECE student at MSRIT Bengaluru, currently interning as an AI Engineer. I work across the full stack of making AI systems actually work in production — from how agents are orchestrated, to how they connect with the real world, to why they sometimes don't behave the way you expect.`,
   experience: [
@@ -58,15 +59,13 @@ const CONFIG = {
     },
   ],
   blogs: [
-    // Add blog posts here when ready. Example:
-    // {
-    //   title: "Byte Pair Encoding: How Tokenization Works Under the Hood",
-    //   desc: "A practical walkthrough of BPE from scratch: word frequencies, pair merges, vocab growth, and why subword tokenization is critical for modern LLM pipelines.",
-    //   tags: ["NLP", "Tokenization", "BPE"],
-    //   date: "March 2026",
-    //   readTime: "20 min",
-    //   link: "https://medium.com/@you/your-post"
-    // }
+    {
+      title: "The Wrong Question Is Holding AI Back",
+      desc: "An engineering case for AI memory that updates over time: reinforce repeated signals, decay stale ones, resolve contradictions, and compress patterns into stronger beliefs.",
+      tags: ["AI Agent", "Memory Management", "AI Engineering"],
+      date: "Mar 24, 2026",
+      link: "https://medium.com/@sarveshbh.2022/the-wrong-question-is-holding-ai-back-af243980f52a?postPublishedType=initial",
+    }
   ],
 };
 // ============================================================
@@ -179,20 +178,21 @@ function MatrixRain({ theme }) {
 }
 
 // ── Tag ──
-function Tag({t,th}){
+function Tag({t,th,variant="default"}){
   const important = [];
   const isImportant = important.includes(t);
+  const isProject = variant === "project";
   return(
     <span style={{
       fontFamily:"monospace",
       fontSize:11,
-      color: isImportant ? th.accent : th.textMuted,
-      background: isImportant ? `${th.accent}10` : th.bg,
-      border: isImportant ? `1px solid ${th.accent}30` : `1px solid ${th.border}`,
+      color: isProject ? th.textSub : (isImportant ? th.accent : th.textMuted),
+      background: isProject ? `${th.accent}12` : (isImportant ? `${th.accent}10` : th.bg),
+      border: isProject ? `1px solid ${th.accent}50` : (isImportant ? `1px solid ${th.accent}30` : `1px solid ${th.border}`),
       borderRadius:4,
       padding:"2px 8px",
       letterSpacing:.5,
-      fontWeight: isImportant ? 600 : 400,
+      fontWeight: isProject ? 500 : (isImportant ? 600 : 400),
       transition: "box-shadow .2s ease, transform .2s ease",
       boxShadow: `0 0 0 0 rgba(0,0,0,0)`
     }}
@@ -422,7 +422,7 @@ function Projects({setPage,th}){
                   ))}
                 </div>
                 <div style={{display:"flex",flexWrap:"wrap",gap:8,marginBottom:16}}>
-                  {p.stack.map(t=><Tag key={t} t={t} th={th}/>)}
+                  {p.stack.map(t=><Tag key={t} t={t} th={th} variant="project"/>)}
                 </div>
                 <div style={{display:"flex",gap:"1rem",borderTop:`1px solid ${th.border}`,paddingTop:16,flexWrap:"wrap"}}>
                   {p.github&&p.github!=="#"&&<a href={p.github} target="_blank" rel="noreferrer" style={{fontFamily:"monospace",fontSize:12,color:th.accent,textDecoration:"none",transition:"all .2s",padding:"6px 12px",border:`1px solid ${th.accent}40`,borderRadius:6}}
@@ -499,7 +499,7 @@ function Blog({setPage,th}){
               onMouseLeave={e=>{e.currentTarget.style.borderColor=th.border;e.currentTarget.style.transform="translateX(0)";}}>
               <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",flexWrap:"wrap",gap:8,marginBottom:10}}>
                 <h3 style={{color:th.text,fontSize:17,fontWeight:700,margin:0,lineHeight:1.3,flex:1}}>{b.title}</h3>
-                <span style={{fontFamily:"monospace",color:th.textMuted,fontSize:11,whiteSpace:"nowrap"}}>{b.date} · {b.readTime} read</span>
+                <span style={{fontFamily:"monospace",color:th.textMuted,fontSize:11,whiteSpace:"nowrap"}}>{b.date}</span>
               </div>
               <p style={{color:th.textSub,fontSize:14,lineHeight:1.65,margin:"0 0 14px"}}>{b.desc}</p>
               <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:10}}>
@@ -559,6 +559,7 @@ function Contact({setPage,th}){
           {label:"Email",value:CONFIG.email,href:`mailto:${CONFIG.email}`},
           {label:"GitHub",value:CONFIG.github,href:CONFIG.github},
           {label:"LinkedIn",value:CONFIG.linkedin,href:CONFIG.linkedin},
+          {label:"Medium",value:CONFIG.medium,href:CONFIG.medium},
         ].map(({label,value,href})=>(
           <a key={label} href={href} target="_blank" rel="noreferrer" style={{textDecoration:"none"}}>
             <div style={{background:th.bgCard,border:`1px solid ${th.border}`,borderRadius:10,
