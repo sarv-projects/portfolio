@@ -6,12 +6,12 @@ import { useState, useEffect, useRef } from "react";
 const CONFIG = {
   name: "Sarvesh Bhattacharyya",
   title: "AI Engineer",
-  tagline: "I build systems that make LLMs act instead of just talk.\nMulti-agent · RAG · Voice AI ·Intelligent Systems · Backend infrastructure",
+  tagline: "I build systems that make LLMs act, not just talk.",
   email: "sarveshbh.2022@gmail.com",
   github: "https://github.com/sarv-projects",
   linkedin: "https://www.linkedin.com/in/sarvesh-bhattacharyya-485360270/",
   medium: "https://medium.com/@sarveshbh.2022",
-  resume: "", // paste your PDF/Drive link here
+  resume: "/resume.pdf", // e.g. "/resume.pdf" (place the PDF in public/)
   about: `Final year ECE student at MSRIT Bengaluru, currently interning as an AI Engineer. I work across the full stack of making AI systems actually work in production — from how agents are orchestrated, to how they connect with the real world, to why they sometimes don't behave the way you expect.`,
   experience: [
     {
@@ -90,11 +90,13 @@ function TechBg({ theme }) {
   useEffect(() => {
     const canvas = ref.current;
     const ctx = canvas.getContext("2d");
-    let W, H, pts, anim;
+    let W, H, pts, anim, tick = 0;
+    let mouse = { x: 0, y: 0, active: false };
     const N = 80; // Increased particles for more sci-fi feel
     function resize() { W = canvas.width = canvas.offsetWidth; H = canvas.height = canvas.offsetHeight; }
     function init() {
       resize();
+      mouse = { x: W * 0.5, y: H * 0.5, active: false };
       pts = Array.from({ length: N }, () => ({
         x: Math.random()*W, y: Math.random()*H,
         vx: (Math.random()-.5)*.3, vy: (Math.random()-.5)*.3, // Slightly faster
@@ -102,8 +104,28 @@ function TechBg({ theme }) {
         glow: Math.random() > 0.7, // Some particles glow
       }));
     }
+
+    function onMouseMove(e) {
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+      mouse.active = true;
+    }
+
+    function onMouseLeave() {
+      mouse.active = false;
+    }
+
     function draw() {
+      tick += 1;
       ctx.clearRect(0, 0, W, H);
+      const gx = W * 0.5 + Math.sin(tick * 0.004) * W * 0.18;
+      const gy = H * 0.45 + Math.cos(tick * 0.0032) * H * 0.12;
+      const mesh = ctx.createRadialGradient(gx, gy, 80, gx, gy, Math.max(W, H) * 0.7);
+      mesh.addColorStop(0, theme === LIGHT ? "rgba(0,153,204,0.10)" : "rgba(0,212,255,0.12)");
+      mesh.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.fillStyle = mesh;
+      ctx.fillRect(0, 0, W, H);
       // Enhanced grid with subtle animation
       ctx.strokeStyle = theme === LIGHT ? "rgba(0,153,204,0.08)" : "rgba(0,212,255,0.05)";
       ctx.lineWidth = 1;
@@ -111,7 +133,19 @@ function TechBg({ theme }) {
       for (let y=0;y<H;y+=60){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
       // Particles with glow
       for (let i=0;i<N;i++) {
-        const p=pts[i]; p.x+=p.vx; p.y+=p.vy;
+        const p=pts[i];
+        p.x+=p.vx; p.y+=p.vy;
+
+        if (mouse.active) {
+          const mdx = mouse.x - p.x;
+          const mdy = mouse.y - p.y;
+          const md = Math.sqrt(mdx * mdx + mdy * mdy);
+          if (md < 150) {
+            p.x -= (mdx / (md || 1)) * 0.35;
+            p.y -= (mdy / (md || 1)) * 0.35;
+          }
+        }
+
         if(p.x<0||p.x>W)p.vx*=-1; if(p.y<0||p.y>H)p.vy*=-1;
         ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
         if (p.glow) {
@@ -126,12 +160,35 @@ function TechBg({ theme }) {
             ctx.strokeStyle=theme===LIGHT?`rgba(0,153,204,${.12*(1-d/120)})`:`rgba(0,212,255,${.15*(1-d/120)})`;
             ctx.lineWidth=.8;ctx.stroke();}
         }
+
+        if (mouse.active) {
+          const mx = p.x - mouse.x;
+          const my = p.y - mouse.y;
+          const md = Math.sqrt(mx * mx + my * my);
+          if (md < 110) {
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(mouse.x, mouse.y);
+            ctx.strokeStyle = theme === LIGHT
+              ? `rgba(0,153,204,${0.18 * (1 - md / 110)})`
+              : `rgba(0,212,255,${0.22 * (1 - md / 110)})`;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+          }
+        }
       }
       anim=requestAnimationFrame(draw);
     }
     init(); draw();
     window.addEventListener("resize",init);
-    return()=>{cancelAnimationFrame(anim);window.removeEventListener("resize",init);};
+    canvas.addEventListener("mousemove", onMouseMove);
+    canvas.addEventListener("mouseleave", onMouseLeave);
+    return()=>{
+      cancelAnimationFrame(anim);
+      window.removeEventListener("resize",init);
+      canvas.removeEventListener("mousemove", onMouseMove);
+      canvas.removeEventListener("mouseleave", onMouseLeave);
+    };
   },[theme]);
   return <canvas ref={ref} style={{position:"absolute",inset:0,width:"100%",height:"100%",opacity:.8}}/>;
 }
@@ -175,6 +232,61 @@ function MatrixRain({ theme }) {
     return () => { cancelAnimationFrame(anim); window.removeEventListener("resize", init); };
   }, [theme]);
   return <canvas ref={ref} style={{position:"absolute",inset:0,width:"100%",height:"100%",opacity:0.1,pointerEvents:"none"}}/>;
+}
+
+// ── Orbital Layer ──
+function OrbitalLayer({ dark, th }) {
+  const ringColor = dark ? "rgba(0,212,255,0.20)" : "rgba(0,153,204,0.18)";
+  const coreGlow = dark ? "rgba(0,212,255,0.10)" : "rgba(0,153,204,0.08)";
+  return (
+    <div style={{
+      position: "absolute",
+      inset: 0,
+      zIndex: 1,
+      pointerEvents: "none",
+      display: "grid",
+      placeItems: "center",
+      opacity: dark ? 0.5 : 0.35,
+    }}>
+      <div style={{ position: "relative", width: "min(72vw, 720px)", aspectRatio: "1 / 1" }}>
+        <div style={{
+          position: "absolute",
+          inset: "8%",
+          borderRadius: "50%",
+          border: `1px solid ${ringColor}`,
+          boxShadow: `0 0 40px ${coreGlow}`,
+          animation: "orbital-spin 44s linear infinite",
+        }} />
+        <div style={{
+          position: "absolute",
+          inset: "20%",
+          borderRadius: "50%",
+          border: `1px dashed ${ringColor}`,
+          animation: "orbital-spin-reverse 62s linear infinite",
+        }} />
+        <div style={{
+          position: "absolute",
+          inset: "33%",
+          borderRadius: "50%",
+          border: `1px solid ${ringColor}`,
+          animation: "orbital-pulse 8s ease-in-out infinite",
+        }} />
+        <div style={{
+          position: "absolute",
+          left: "50%",
+          top: "8%",
+          width: 7,
+          height: 7,
+          marginLeft: -3.5,
+          borderRadius: "50%",
+          background: th.accent,
+          boxShadow: `0 0 12px ${th.accent}`,
+          animation: "orbital-spin 44s linear infinite",
+          transformOrigin: "0 300px",
+        }} />
+      </div>
+    </div>
+  );
 }
 
 // ── Tag ──
@@ -272,26 +384,33 @@ function Nav({page,setPage,dark,setDark,th}){
       backdropFilter:"blur(18px)",borderBottom:`1px solid ${th.border}`,transition:"background .3s"}}>
       <span onClick={()=>setPage("home")} style={{fontFamily:"monospace",fontSize:17,
         color:th.text,cursor:"pointer",letterSpacing:1,fontWeight:700}}>
-       <span style={{color:th.accent,fontWeight:400}}>✦ AI</span>
+      <span style={{color:th.accent,fontWeight:400}}>✦ SB</span>
       </span>
       {/* Desktop Menu */}
       <div id="desktop-nav" style={{display:"flex",alignItems:"center",gap:"1.8rem"}}>
         {PAGES.filter(p=>p!=="home").map(p=>(
-          <span key={p} onClick={()=>setPage(p)} style={{fontFamily:"monospace",fontSize:11,cursor:"pointer",
-            letterSpacing:1.5,color:page===p?th.accent:th.textSub,textTransform:"uppercase",
-            transition:"color .2s",position:"relative"}}
-            onMouseEnter={e=>e.currentTarget.style.color=th.accent}
-            onMouseLeave={e=>e.currentTarget.style.color=page===p?th.accent:th.textSub}>
+          <span key={p} onClick={()=>setPage(p)} style={{fontFamily:"monospace",fontSize:12,cursor:"pointer",
+            letterSpacing:1.9,color:page===p?th.accent:th.text,textTransform:"uppercase",
+            opacity:page===p?1:.82,transition:"color .2s,opacity .2s",position:"relative"}}
+            onMouseEnter={e=>{e.currentTarget.style.color=th.accent;e.currentTarget.style.opacity=1;}}
+            onMouseLeave={e=>{e.currentTarget.style.color=page===p?th.accent:th.text;e.currentTarget.style.opacity=page===p?1:.82;}}>
             {page===p&&<span style={{position:"absolute",bottom:-4,left:0,right:0,height:1,background:th.accent,borderRadius:2}}/>}
             {p}
           </span>
         ))}
         {CONFIG.resume&&(
-          <a href={CONFIG.resume} target="_blank" rel="noreferrer" style={{fontFamily:"monospace",fontSize:12,
-            letterSpacing:1.5,color:th.accent,border:`1px solid ${th.accent}50`,borderRadius:5,
-            padding:"4px 12px",textDecoration:"none",transition:"all .2s"}}
-            onMouseEnter={e=>{e.currentTarget.style.background=`${th.accent}15`;e.currentTarget.style.borderColor=th.accent;}}
-            onMouseLeave={e=>{e.currentTarget.style.background="transparent";e.currentTarget.style.borderColor=`${th.accent}50`;}}>RESUME ↗</a>
+          <div style={{display:"flex",alignItems:"center",gap:".55rem"}}>
+            <a href={CONFIG.resume} target="_blank" rel="noreferrer" style={{fontFamily:"monospace",fontSize:12,
+              letterSpacing:1.2,color:th.accent,border:`1px solid ${th.accent}50`,borderRadius:5,
+              padding:"4px 10px",textDecoration:"none",transition:"all .2s"}}
+              onMouseEnter={e=>{e.currentTarget.style.background=`${th.accent}15`;e.currentTarget.style.borderColor=th.accent;}}
+              onMouseLeave={e=>{e.currentTarget.style.background="transparent";e.currentTarget.style.borderColor=`${th.accent}50`;}}>VIEW RESUME ↗</a>
+            <a href={CONFIG.resume} download style={{fontFamily:"monospace",fontSize:12,
+              letterSpacing:1.2,color:th.textSub,border:`1px solid ${th.border}`,borderRadius:5,
+              padding:"4px 10px",textDecoration:"none",transition:"all .2s"}}
+              onMouseEnter={e=>{e.currentTarget.style.color=th.accent;e.currentTarget.style.borderColor=th.accent;}}
+              onMouseLeave={e=>{e.currentTarget.style.color=th.textSub;e.currentTarget.style.borderColor=th.border;}}>DOWNLOAD ⤓</a>
+          </div>
         )}
         <button onClick={()=>setDark(d=>!d)} style={{background:"transparent",border:`1px solid ${th.border}`,
           borderRadius:20,padding:"4px 10px",cursor:"pointer",fontSize:14,transition:"all .2s",
@@ -323,9 +442,14 @@ function Nav({page,setPage,dark,setDark,th}){
           </span>
         ))}
         {CONFIG.resume&&(
-          <a href={CONFIG.resume} target="_blank" rel="noreferrer" style={{fontFamily:"monospace",fontSize:12,
-            letterSpacing:1.5,color:th.accent,border:`1px solid ${th.accent}50`,borderRadius:5,
-            padding:"8px 12px",textDecoration:"none",display:"inline-block",width:"fit-content"}}>RESUME ↗</a>
+          <div style={{display:"flex",gap:".6rem",flexWrap:"wrap"}}>
+            <a href={CONFIG.resume} target="_blank" rel="noreferrer" style={{fontFamily:"monospace",fontSize:12,
+              letterSpacing:1.2,color:th.accent,border:`1px solid ${th.accent}50`,borderRadius:5,
+              padding:"8px 12px",textDecoration:"none",display:"inline-block",width:"fit-content"}}>VIEW Resume ↗</a>
+            <a href={CONFIG.resume} download style={{fontFamily:"monospace",fontSize:12,
+              letterSpacing:1.2,color:th.textSub,border:`1px solid ${th.border}`,borderRadius:5,
+              padding:"8px 12px",textDecoration:"none",display:"inline-block",width:"fit-content"}}>DOWNLOAD ⤓</a>
+          </div>
         )}
       </div>
     </nav>
@@ -335,27 +459,69 @@ function Nav({page,setPage,dark,setDark,th}){
 // ── HOME ──
 function Home({setPage,th,dark}){
   const [typed,setTyped]=useState("");
-  const [cur,setCur]=useState(true);
+  const moduleGroups = [
+    {
+      title: "AI",
+      color: th.accent,
+      items: [
+        { emoji: "🤖", label: "Multi-agent" },
+        { emoji: "🔎", label: "RAG" },
+        { emoji: "🎙️", label: "Voice AI" },
+      ],
+    },
+    {
+      title: "Backend",
+      color: dark ? "#9db1cc" : "#4f6078",
+      items: [
+        { emoji: "🧱", label: "Backend Infrastructure" },
+        { emoji: "📡", label: "Distributed Systems" },
+      ],
+    },
+  ];
   const full=CONFIG.tagline;
   useEffect(()=>{let i=0;const iv=setInterval(()=>{setTyped(full.slice(0,i+1));i++;if(i>=full.length)clearInterval(iv);},38);return()=>clearInterval(iv);},[full]);
-  useEffect(()=>{const iv=setInterval(()=>setCur(c=>!c),530);return()=>clearInterval(iv);},[]);
   return(
     <div style={{position:"relative",height:"calc(100vh - 52px)",display:"flex",flexDirection:"column",
       alignItems:"center",justifyContent:"center",overflow:"hidden",paddingTop:"52px"}}>
       <TechBg theme={dark?DARK:LIGHT}/>
       <MatrixRain theme={dark?DARK:LIGHT}/>
+      <OrbitalLayer dark={dark} th={th}/>
       <div style={{position:"absolute",inset:0,
         background:dark?"radial-gradient(ellipse at center,transparent 30%,rgba(7,8,15,0.85) 100%)":"radial-gradient(ellipse at center,transparent 30%,rgba(240,244,248,0.85) 100%)",
         zIndex:1,pointerEvents:"none"}}/>
       <div style={{position:"absolute",bottom:0,left:0,right:0,height:200,
         background:dark?"linear-gradient(to top,rgba(7,8,15,1),transparent)":"linear-gradient(to top,rgba(240,244,248,1),transparent)",
         zIndex:2,pointerEvents:"none"}}/>
+      <div style={{position:"absolute",bottom:72,left:"50%",transform:"translateX(-50%)",width:"min(76vw,780px)",height:120,
+        background:dark?"radial-gradient(ellipse at center, rgba(0,212,255,0.16) 0%, rgba(0,212,255,0.05) 42%, rgba(0,0,0,0) 75%)":"radial-gradient(ellipse at center, rgba(0,153,204,0.18) 0%, rgba(0,153,204,0.06) 45%, rgba(0,0,0,0) 78%)",
+        zIndex:2,pointerEvents:"none"}}/>
       <FadeIn delay={90}>
         <div style={{position:"relative",zIndex:3,textAlign:"center",padding:"0 1.5rem",maxWidth:740}}>
           <h1 style={{fontSize:"clamp(2.2rem,5vw,4.5rem)",fontWeight:900,color:th.text,margin:0,lineHeight:1.1,letterSpacing:-1.5}}>{CONFIG.name}</h1>
-          <p style={{color:th.textSub,fontSize:"clamp(.95rem,1.8vw,1.15rem)",marginTop:22,minHeight:34,fontStyle:"italic",letterSpacing:.3,whiteSpace:"pre-wrap"}}>
-            "{typed}{cur&&<span style={{color:th.accent}}>|</span>}"
+          <p style={{color:th.textSub,fontSize:"clamp(1rem,2vw,1.22rem)",marginTop:22,minHeight:34,fontStyle:"normal",fontWeight:300,letterSpacing:.2,whiteSpace:"pre-wrap"}}>
+            {typed}
           </p>
+          <div id="hero-modules" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,marginTop:16,textAlign:"left"}}>
+            {moduleGroups.map((group) => (
+              <div key={group.title} style={{
+                background: dark ? "rgba(255,255,255,0.035)" : "rgba(255,255,255,0.6)",
+                border: dark ? `1px solid ${group.color}55` : `1px solid ${group.color}35`,
+                borderRadius:12,
+                padding:"10px 12px",
+                backdropFilter:"blur(6px)",
+                WebkitBackdropFilter:"blur(6px)",
+              }}>
+                <p style={{margin:"0 0 8px",fontFamily:"monospace",fontSize:11,letterSpacing:1.6,textTransform:"uppercase",color:group.color,fontWeight:600}}>{group.title}</p>
+                <div style={{display:"flex",flexWrap:"nowrap",gap:8,overflowX:"auto",overflowY:"hidden",paddingBottom:2,scrollbarWidth:"none"}}>
+                  {group.items.map((item) => (
+                    <span key={item.label} style={{display:"inline-flex",alignItems:"center",gap:6,fontFamily:"monospace",fontSize:11,color:th.text,background:dark?"rgba(7,11,24,0.75)":"rgba(255,255,255,0.88)",border:`1px solid ${group.color}66`,borderRadius:999,padding:"5px 10px",letterSpacing:.2,whiteSpace:"nowrap",flex:"0 0 auto"}}>
+                      <span>{item.emoji}</span>{item.label}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
           <div style={{display:"flex",gap:"1rem",justifyContent:"center",marginTop:44,flexWrap:"wrap"}}>
             <button onClick={()=>setPage("projects")} style={{fontFamily:"monospace",fontSize:13,letterSpacing:1.5,
               textTransform:"uppercase",padding:"11px 32px",borderRadius:6,cursor:"pointer",
@@ -366,18 +532,10 @@ function Home({setPage,th,dark}){
               View Projects</button>
             <button onClick={()=>setPage("about")} style={{fontFamily:"monospace",fontSize:13,letterSpacing:1.5,
               textTransform:"uppercase",padding:"11px 32px",borderRadius:6,cursor:"pointer",
-              background:"transparent",color:th.accent,border:`1px solid ${th.accent}60`,transition:"all .2s"}}
-              onMouseEnter={e=>{e.currentTarget.style.background=`${th.accent}10`;e.currentTarget.style.borderColor=th.accent;}}
-              onMouseLeave={e=>{e.currentTarget.style.background="transparent";e.currentTarget.style.borderColor=`${th.accent}60`;}}>
+              background:`${th.accent}10`,color:th.accent,border:`2px solid ${th.accent}70`,transition:"all .2s"}}
+              onMouseEnter={e=>{e.currentTarget.style.background=`${th.accent}18`;e.currentTarget.style.borderColor=th.accent;}}
+              onMouseLeave={e=>{e.currentTarget.style.background=`${th.accent}10`;e.currentTarget.style.borderColor=`${th.accent}70`;}}>
               About Me</button>
-          </div>
-          <div style={{display:"flex",gap:"1.5rem",justifyContent:"center",marginTop:36}}>
-            {[["GitHub",CONFIG.github],["LinkedIn",CONFIG.linkedin]].map(([l,href])=>(
-              <a key={l} href={href} target="_blank" rel="noreferrer" style={{fontFamily:"monospace",fontSize:12,
-                color:`${th.accent}90`,textDecoration:"none",letterSpacing:1,transition:"color .2s"}}
-                onMouseEnter={e=>e.currentTarget.style.color=th.accent}
-                onMouseLeave={e=>e.currentTarget.style.color=`${th.accent}90`}>{l} ↗</a>
-            ))}
           </div>
         </div>
       </FadeIn>
@@ -597,9 +755,22 @@ export default function App(){
   return(
     <>
     <style>{`
+      @keyframes orbital-spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      @keyframes orbital-spin-reverse {
+        from { transform: rotate(360deg); }
+        to { transform: rotate(0deg); }
+      }
+      @keyframes orbital-pulse {
+        0%, 100% { opacity: 0.45; transform: scale(1); }
+        50% { opacity: 0.8; transform: scale(1.02); }
+      }
       @media (max-width: 768px) {
         #desktop-nav { display: none !important; }
         #mobile-nav { display: flex !important; }
+        #hero-modules { grid-template-columns: 1fr !important; }
         body { font-size: 14px; }
       }
       @media (min-width: 769px) {
