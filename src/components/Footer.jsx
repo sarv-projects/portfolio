@@ -6,7 +6,7 @@ export default function Footer({ th }) {
       style={{
         background: th.bgCard,
         borderTop: `1px solid ${th.border}`,
-        padding: "2.5rem 2rem",
+        padding: "clamp(1.5rem, 4vw, 2.5rem) clamp(1rem, 3vw, 2rem)",
         textAlign: "center",
         fontFamily: "monospace",
         color: th.textMuted,

@@ -3,7 +3,7 @@ import { FadeIn, BackBtn } from "./UI";
 
 export default function About({ setPage, th, dark }) {
   return (
-    <div style={{ padding: "7rem 2.5rem 6rem", maxWidth: 860, margin: "0 auto" }}>
+    <div className="page-section" style={{ maxWidth: 860 }}>
       <BackBtn setPage={setPage} th={th} />
       <FadeIn>
         <p

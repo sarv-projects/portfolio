@@ -40,19 +40,23 @@ export const CONFIG = {
   skillGroups: [
     {
       label: "Languages",
-      skills: ["Python", "JavaScript", "C++", "Rust"],
+      skills: ["Python", "JavaScript", "C++", "Rust (basic)"],
     },
     {
-      label: "AI / ML",
-      skills: ["Multi-Agent Systems", "RAG Pipelines", "Voice AI", "LLM Fine-tuning (QLoRA)", "LangChain / LangGraph / Langfuse"],
+      label: "Backend",
+      skills: ["FastAPI", "WebSockets", "Redis", "SQLite", "PostgreSQL", "Docker", "GitHub Actions", "AWS", "Ubuntu"],
     },
     {
-      label: "Infra & Data",
-      skills: ["Docker", "GitHub Actions", "Redis", "SQLite", "Neo4j", "Vector DBs (Qdrant, Chroma, Pinecone)", "Firebase"],
+      label: "AI Engineering",
+      skills: ["Voice AI", "RAG", "Multi-Agent Systems", "Vector Search", "LangChain", "LangGraph", "Langfuse", "Prompt Engineering"],
     },
     {
-      label: "Frameworks",
-      skills: ["FastAPI", "React Native", "Bash", "Ubuntu"],
+      label: "Data Systems",
+      skills: ["NoSQL", "Neo4j", "Qdrant", "ChromaDB", "Pinecone"],
+    },
+    {
+      label: "Mobile / Edge AI / Robotics",
+      skills: ["React Native", "Firebase", "YOLO", "Deepgram", "ROS2"],
     },
   ],
   projects: [
@@ -105,9 +109,9 @@ export const PAGES = ["home", "projects", "skills", "blog", "about", "contact"];
 
 // ── Theme ──
 export const DARK = {
-  bg: "#0b0d14",
-  bgCard: "#11141c",
-  border: "#1e2230",
+  bg: "#020308",
+  bgCard: "#0a0e1a",
+  border: "#1a2040",
   text: "#f1f5f9",
   textSub: "#b8c9e0",
   textMuted: "#6c7e98",

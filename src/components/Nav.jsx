@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { CONFIG, PAGES } from "./config";
 
-export default function Nav({ page, setPage, dark, setDark, th }) {
+export default function Nav({ page, setPage, th }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -18,7 +18,7 @@ export default function Nav({ page, setPage, dark, setDark, th }) {
         padding: "0 1.5rem",
         height: 52,
         boxSizing: "border-box",
-        background: dark ? "rgba(7,8,15,0.92)" : "rgba(240,244,248,0.92)",
+        background: "rgba(7,8,15,0.92)",
         backdropFilter: "blur(18px)",
         WebkitBackdropFilter: "blur(18px)",
         borderBottom: `1px solid ${th.border}`,
@@ -142,21 +142,6 @@ export default function Nav({ page, setPage, dark, setDark, th }) {
           </div>
         )}
 
-        <button
-          onClick={() => setDark((d) => !d)}
-          style={{
-            background: "transparent",
-            border: `1px solid ${th.border}`,
-            borderRadius: 20,
-            padding: "4px 10px",
-            cursor: "pointer",
-            fontSize: 14,
-            transition: "all 0.2s",
-            color: th.textSub,
-          }}
-        >
-          {dark ? "☀" : "☾"}
-        </button>
       </div>
 
       {/* Mobile toggle */}
@@ -164,18 +149,6 @@ export default function Nav({ page, setPage, dark, setDark, th }) {
         className="nav-mobile"
         style={{ display: "flex", alignItems: "center", gap: "0.8rem" }}
       >
-        <button
-          onClick={() => setDark((d) => !d)}
-          style={{
-            background: "transparent",
-            border: "none",
-            cursor: "pointer",
-            fontSize: 16,
-            color: th.textSub,
-          }}
-        >
-          {dark ? "☀" : "☾"}
-        </button>
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           style={{

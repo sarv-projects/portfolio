@@ -27,7 +27,30 @@ body {
   color: inherit;
 }
 
+/* ── Shared Page Section ── */
+.page-section {
+  padding: 7rem 2.5rem 6rem;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .page-section {
+    padding: 6rem 1.5rem 4rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-section {
+    padding: 5.5rem 1rem 3rem;
+  }
+}
+
 /* ── Responsive Projects Grid ── */
+.projects-grid {
+  display: grid;
+  gap: 1.8rem;
+}
+
 @media (min-width: 1024px) {
   .projects-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -49,6 +72,7 @@ body {
 @media (max-width: 640px) {
   .projects-grid {
     grid-template-columns: 1fr;
+    gap: 1.25rem;
   }
 
   .project-desc {
@@ -70,6 +94,35 @@ body {
 @media (min-width: 641px) {
   .nav-mobile {
     display: none !important;
+  }
+}
+
+/* ── Contact cards ── */
+.contact-value {
+  color: inherit;
+  font-size: 13px;
+  text-align: right;
+  word-break: break-all;
+  max-width: 55%;
+}
+
+@media (max-width: 480px) {
+  .contact-value {
+    max-width: 50%;
+    font-size: 12px;
+  }
+}
+
+/* ── Project card ── */
+.project-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+@media (max-width: 480px) {
+  .project-card {
+    padding: 1.25rem !important;
   }
 }
 

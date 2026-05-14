@@ -36,7 +36,7 @@ export default function Contact({ setPage, th, dark }) {
   ];
 
   return (
-    <div style={{ padding: "7rem 2.5rem 6rem", maxWidth: 600, margin: "0 auto" }}>
+    <div className="page-section" style={{ maxWidth: 600 }}>
       <BackBtn setPage={setPage} th={th} />
       <FadeIn>
         <p
@@ -141,12 +141,9 @@ export default function Contact({ setPage, th, dark }) {
                 )}
               </div>
               <span
+                className="contact-value"
                 style={{
                   color: th.textSub,
-                  fontSize: 13,
-                  textAlign: "right",
-                  wordBreak: "break-all",
-                  maxWidth: "55%",
                 }}
               >
                 {value} ↗
