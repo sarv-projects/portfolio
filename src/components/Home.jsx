@@ -110,26 +110,26 @@ export default function Home({ setPage, th }) {
       {/* Background layer - simplified */}
       <TechBg />
 
-      {/* Deep space vignette */}
+      {/* Subtle edge vignette — NOT covering center content */}
       <div
         style={{
           position: "absolute",
           inset: 0,
-          background: "radial-gradient(ellipse at center, transparent 15%, rgba(2,3,8,0.4) 50%, rgba(2,3,8,0.9) 100%)",
+          background: "radial-gradient(ellipse at center, transparent 40%, rgba(5,10,21,0.3) 75%, rgba(5,10,21,0.6) 100%)",
           zIndex: 1,
           pointerEvents: "none",
         }}
       />
 
-      {/* Bottom fade */}
+      {/* Bottom fade — shorter, less opaque */}
       <div
         style={{
           position: "absolute",
           bottom: 0,
           left: 0,
           right: 0,
-          height: 200,
-          background: "linear-gradient(to top, rgba(2,3,8,1), transparent)",
+          height: 120,
+          background: "linear-gradient(to top, rgba(5,10,21,0.8), transparent)",
           zIndex: 2,
           pointerEvents: "none",
         }}
@@ -167,10 +167,10 @@ export default function Home({ setPage, th }) {
               style={{
                 height: 2,
                 width: 0,
-                background: "#ffffff",
+                background: "#38bdf8",
                 margin: "20px auto 20px",
                 borderRadius: 2,
-                opacity: 0.3,
+                opacity: 0.7,
                 animation: showName ? "line-grow 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.7s forwards" : "none",
               }}
             />
@@ -178,10 +178,10 @@ export default function Home({ setPage, th }) {
           {/* Tagline */}
           <p
             style={{
-              color: th.textSub,
+              color: "#e2e8f0",
               fontSize: "clamp(1rem, 2vw, 1.22rem)",
               minHeight: 34,
-              fontWeight: 300,
+              fontWeight: 400,
               letterSpacing: 0.3,
               whiteSpace: "pre-wrap",
               opacity: 0,
@@ -223,18 +223,20 @@ export default function Home({ setPage, th }) {
                 padding: "12px 36px",
                 borderRadius: 8,
                 cursor: "pointer",
-                background: "#020308",
+                background: "rgba(255,255,255,0.06)",
                 color: "#ffffff",
-                border: "1px solid rgba(255,255,255,0.15)",
+                border: "1px solid rgba(255,255,255,0.3)",
                 fontWeight: 700,
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = "rgba(255,255,255,0.08)";
+                e.currentTarget.style.background = "rgba(255,255,255,0.12)";
                 e.currentTarget.style.borderColor = "#ffffff";
+                e.currentTarget.style.boxShadow = "0 0 20px rgba(56,189,248,0.3)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = "#020308";
-                e.currentTarget.style.borderColor = "rgba(255,255,255,0.15)";
+                e.currentTarget.style.background = "rgba(255,255,255,0.06)";
+                e.currentTarget.style.borderColor = "rgba(255,255,255,0.3)";
+                e.currentTarget.style.boxShadow = "none";
               }}
             >
               View Projects
@@ -250,18 +252,20 @@ export default function Home({ setPage, th }) {
                 padding: "12px 36px",
                 borderRadius: 8,
                 cursor: "pointer",
-                background: "#020308",
+                background: "rgba(255,255,255,0.06)",
                 color: "#ffffff",
-                border: "1px solid rgba(255,255,255,0.15)",
+                border: "1px solid rgba(255,255,255,0.3)",
                 fontWeight: 700,
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = "rgba(255,255,255,0.08)";
+                e.currentTarget.style.background = "rgba(255,255,255,0.12)";
                 e.currentTarget.style.borderColor = "#ffffff";
+                e.currentTarget.style.boxShadow = "0 0 20px rgba(56,189,248,0.3)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = "#020308";
-                e.currentTarget.style.borderColor = "rgba(255,255,255,0.15)";
+                e.currentTarget.style.background = "rgba(255,255,255,0.06)";
+                e.currentTarget.style.borderColor = "rgba(255,255,255,0.3)";
+                e.currentTarget.style.boxShadow = "none";
               }}
             >
               About Me
@@ -291,18 +295,18 @@ export default function Home({ setPage, th }) {
                     fontFamily: "'JetBrains Mono', monospace",
                     fontSize: "0.7rem",
                     fontWeight: 500,
-                    color: "#e2e8f0",
+                    color: "#f1f5f9",
                     letterSpacing: "0.15em",
                     textTransform: "uppercase",
                     borderRadius: 8,
-                    background: "rgba(255, 255, 255, 0.04)",
+                    background: "rgba(255, 255, 255, 0.06)",
                     backdropFilter: "blur(20px) saturate(180%)",
                     WebkitBackdropFilter: "blur(20px) saturate(180%)",
-                    borderTop: "1px solid rgba(0, 210, 255, 0.35)",
-                    borderLeft: "1px solid rgba(0, 210, 255, 0.25)",
-                    borderRight: "1px solid rgba(0, 210, 255, 0.1)",
-                    borderBottom: "1px solid rgba(0, 210, 255, 0.08)",
-                    boxShadow: "0 0 40px rgba(0, 210, 255, 0.12)",
+                    borderTop: "1px solid rgba(56, 189, 248, 0.5)",
+                    borderLeft: "1px solid rgba(56, 189, 248, 0.35)",
+                    borderRight: "1px solid rgba(56, 189, 248, 0.2)",
+                    borderBottom: "1px solid rgba(56, 189, 248, 0.15)",
+                    boxShadow: "0 0 30px rgba(56, 189, 248, 0.15), inset 0 1px 0 rgba(255,255,255,0.05)",
                     transition: "all 0.3s ease",
                   }}
                   onMouseEnter={(e) => {
