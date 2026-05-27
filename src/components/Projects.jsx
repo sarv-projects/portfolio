@@ -76,6 +76,7 @@ export default function Projects({ setPage, th, dark }) {
                   ? `0 2px 8px rgba(0,0,0,0.15)`
                   : `0 1px 3px rgba(0,0,0,0.04), 0 2px 8px rgba(0,0,0,0.04)`;
                 e.currentTarget.style.borderColor = th.border;
+                e.currentTarget.style.borderLeftColor = th.accent;
               }}
             >
               

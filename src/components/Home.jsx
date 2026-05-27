@@ -65,6 +65,7 @@ function MagneticBtn({ children, onClick, style, onMouseEnter, onMouseLeave }) {
 export default function Home({ setPage, th }) {
   const [typed, setTyped] = useState("");
   const [showName, setShowName] = useState(false);
+  const [typingDone, setTypingDone] = useState(false);
   const heroRef = useRef(null);
 
   const full = CONFIG.tagline;
@@ -82,7 +83,10 @@ export default function Home({ setPage, th }) {
     const iv = setInterval(() => {
       setTyped(full.slice(0, i + 1));
       i++;
-      if (i >= full.length) clearInterval(iv);
+      if (i >= full.length) {
+        clearInterval(iv);
+        setTypingDone(true);
+      }
     }, 35);
     return () => clearInterval(iv);
   }, [showName, full]);
@@ -185,14 +189,16 @@ export default function Home({ setPage, th }) {
             }}
           >
             {typed}
-            <span
-              style={{
-                opacity: 0.6,
-                animation: "pulse-glow 1s ease-in-out infinite",
-              }}
-            >
-              |
-            </span>
+            {!typingDone && (
+              <span
+                style={{
+                  opacity: 0.6,
+                  animation: "pulse-glow 1s ease-in-out infinite",
+                }}
+              >
+                |
+              </span>
+            )}
           </p>
 
           {/* CTA buttons — magnetic */}
@@ -280,7 +286,7 @@ export default function Home({ setPage, th }) {
                   key={tag}
                   style={{
                     position: "relative",
-                    padding: "16px 32px",
+                    padding: "8px 18px",
                     cursor: "default",
                     fontFamily: "'JetBrains Mono', monospace",
                     fontSize: "0.7rem",
@@ -288,6 +294,7 @@ export default function Home({ setPage, th }) {
                     color: "#e2e8f0",
                     letterSpacing: "0.15em",
                     textTransform: "uppercase",
+                    borderRadius: 8,
                     background: "rgba(255, 255, 255, 0.04)",
                     backdropFilter: "blur(20px) saturate(180%)",
                     WebkitBackdropFilter: "blur(20px) saturate(180%)",

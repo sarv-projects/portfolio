@@ -63,9 +63,9 @@ body {
   }
 }
 
-@media (max-width: 1023px) {
+@media (max-width: 768px) {
   .projects-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
   }
 }
 
@@ -73,13 +73,6 @@ body {
   .projects-grid {
     grid-template-columns: 1fr;
     gap: 1.25rem;
-  }
-
-  .project-desc {
-    max-height: 160px;
-    overflow: hidden;
-    -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
-    mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
   }
 
   .nav-desktop {
@@ -91,8 +84,20 @@ body {
   }
 }
 
+@media (max-width: 640px) {
+  .back-btn-desktop {
+    display: none !important;
+  }
+  .back-btn-mobile {
+    display: inline-block !important;
+  }
+}
+
 @media (min-width: 641px) {
   .nav-mobile {
+    display: none !important;
+  }
+  .back-btn-mobile {
     display: none !important;
   }
 }

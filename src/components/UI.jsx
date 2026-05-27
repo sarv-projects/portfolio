@@ -90,32 +90,57 @@ export function Reveal({ children, threshold = 0.2, delay = 0 }) {
 export function BackBtn({ setPage, th }) {
   const [hov, setHov] = useState(false);
   return (
-    <button
-      onClick={() => setPage("home")}
-      onMouseEnter={() => setHov(true)}
-      onMouseLeave={() => setHov(false)}
-      style={{
-        position: "fixed",
-        bottom: 28,
-        right: 28,
-        zIndex: 200,
-        fontFamily: "monospace",
-        fontSize: 12,
-        letterSpacing: 1.5,
-        padding: "9px 20px",
-        borderRadius: 8,
-        cursor: "pointer",
-        background: hov ? `${th.accent}12` : `${th.bgCard}cc`,
-        color: hov ? th.accent : th.textMuted,
-        border: `1px solid ${hov ? th.accent : th.border}`,
-        backdropFilter: "blur(12px)",
-        WebkitBackdropFilter: "blur(12px)",
-        boxShadow: hov ? `0 4px 20px rgba(0,0,0,0.08)` : "none",
-        transition: "all 0.25s cubic-bezier(0.22, 1, 0.36, 1)",
-      }}
-    >
-      ← HOME
-    </button>
+    <>
+      {/* Desktop: fixed bottom-right */}
+      <button
+        onClick={() => setPage("home")}
+        onMouseEnter={() => setHov(true)}
+        onMouseLeave={() => setHov(false)}
+        className="back-btn-desktop"
+        style={{
+          position: "fixed",
+          bottom: 28,
+          right: 28,
+          zIndex: 200,
+          fontFamily: "monospace",
+          fontSize: 12,
+          letterSpacing: 1.5,
+          padding: "9px 20px",
+          borderRadius: 8,
+          cursor: "pointer",
+          background: hov ? `${th.accent}12` : `${th.bgCard}cc`,
+          color: hov ? th.accent : th.textMuted,
+          border: `1px solid ${hov ? th.accent : th.border}`,
+          backdropFilter: "blur(12px)",
+          WebkitBackdropFilter: "blur(12px)",
+          boxShadow: hov ? `0 4px 20px rgba(0,0,0,0.08)` : "none",
+          transition: "all 0.25s cubic-bezier(0.22, 1, 0.36, 1)",
+        }}
+      >
+        ← HOME
+      </button>
+      {/* Mobile: inline at top of page, not fixed */}
+      <button
+        onClick={() => setPage("home")}
+        className="back-btn-mobile"
+        style={{
+          display: "none",
+          fontFamily: "monospace",
+          fontSize: 12,
+          letterSpacing: 1.5,
+          padding: "8px 18px",
+          borderRadius: 8,
+          cursor: "pointer",
+          background: `${th.bgCard}cc`,
+          color: th.textMuted,
+          border: `1px solid ${th.border}`,
+          marginBottom: "1.5rem",
+          transition: "all 0.25s cubic-bezier(0.22, 1, 0.36, 1)",
+        }}
+      >
+        ← HOME
+      </button>
+    </>
   );
 }
 

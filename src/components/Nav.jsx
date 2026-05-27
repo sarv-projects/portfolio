@@ -18,7 +18,7 @@ export default function Nav({ page, setPage, th }) {
         padding: "0 1.5rem",
         height: 52,
         boxSizing: "border-box",
-        background: "rgba(7,8,15,0.92)",
+        background: `${th.bg}eb`,
         backdropFilter: "blur(18px)",
         WebkitBackdropFilter: "blur(18px)",
         borderBottom: `1px solid ${th.border}`,
