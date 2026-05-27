@@ -181,28 +181,31 @@ export default function About({ setPage, th, dark }) {
                         margin: idx === 0 ? "0" : "14px 0 0",
                       }}
                     >
-                      <div
-                        style={{
-                          minWidth: 7,
-                          marginTop: 5,
-                        }}
-                      >
+                      {idx > 0 && (
                         <div
                           style={{
-                            width: 6,
-                            height: 6,
-                            borderRadius: "50%",
-                            background: th.accent,
-                            boxShadow: `0 0 8px ${th.accent}, 0 0 20px ${th.accent}50`,
-                            transition: "box-shadow 0.3s ease",
+                            minWidth: 7,
+                            marginTop: 5,
                           }}
-                        />
-                      </div>
+                        >
+                          <div
+                            style={{
+                              width: 6,
+                              height: 6,
+                              borderRadius: "50%",
+                              background: th.accent,
+                              boxShadow: `0 0 8px ${th.accent}, 0 0 20px ${th.accent}50`,
+                              transition: "box-shadow 0.3s ease",
+                            }}
+                          />
+                        </div>
+                      )}
                       <p
                         style={{
                           margin: 0,
                           lineHeight: 1.7,
                           color: th.textSub,
+                          fontWeight: idx === 0 ? 500 : 400,
                         }}
                       >
                         {para}

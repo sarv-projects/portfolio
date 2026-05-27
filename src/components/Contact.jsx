@@ -78,7 +78,6 @@ export default function Contact({ setPage, th, dark }) {
         {links.map(({ label, value, href, desc }, i) => (
           <Reveal key={label} delay={i * 80}>
           <a
-            key={label}
             href={href}
             target="_blank"
             rel="noreferrer"
