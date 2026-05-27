@@ -61,7 +61,7 @@ export const CONFIG = {
   ],
   projects: [
     {
-      title: "🔥 ROAST — Resume Critic AI",
+      title: "🔥 ROAST — Agentic Resume Critic",
       status: "live",
       thumbGradient: ["#00d4ff", "#0066ff"],
       desc: "A 6-agent pipeline providing calibrated market intelligence and actionable feedback for resumes. Features an offline market intelligence store (SQLite+FTS5+sqlite-vec), WebSocket streaming for real-time critique generation, Redis-backed sessions with progress tracking, and automatic LLM provider fallback for production reliability.",
