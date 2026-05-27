@@ -109,12 +109,12 @@ export const PAGES = ["home", "projects", "skills", "blog", "about", "contact"];
 
 // ── Theme ──
 export const DARK = {
-  bg: "#020308",
-  bgCard: "#0a0e1a",
-  border: "#1a2040",
-  text: "#f1f5f9",
-  textSub: "#b8c9e0",
-  textMuted: "#6c7e98",
+  bg: "#050a15",
+  bgCard: "#0f1629",
+  border: "#253256",
+  text: "#f8fafc",
+  textSub: "#dce6f2",
+  textMuted: "#8da2be",
   accent: "#38bdf8",
 };
 
